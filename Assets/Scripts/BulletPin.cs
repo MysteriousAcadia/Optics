@@ -18,7 +18,6 @@ public class BulletPin : MonoBehaviour
     {
         Debug.LogError("HERRE");
         if(isSelected){
-            
         }
         else{
             isSelected = true;

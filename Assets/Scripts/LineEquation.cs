@@ -34,6 +34,12 @@ public struct LineEquation{
         return points;
     }
 
+    public float angleBetween(LineEquation l1){
+        float tanAngle = (a*l1.b-b*l1.a)/(b*l1.b+a*l1.a);
+        float angle = Mathf.Atan2(tanAngle,1);
+        return angle*180f/Mathf.PI;
+    }
+
     public Vector3 pointOfIntersection(LineEquation l1){
         Vector3 ans = new Vector3();
         ans.z = p1.z;
