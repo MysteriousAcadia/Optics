@@ -14,6 +14,7 @@ public class Prism : MonoBehaviour
     [SerializeField]
     protected float a = 60f; //Angle of Prism 
     bool isSelected = false;//
+    public DrawLine drawLine;
     public void setRotation(float angle){ //Call it to change orientation of prism
         transform.Rotate(new Vector3(0, angle, 0));
         Debug.LogError(circleRadius());
@@ -148,6 +149,10 @@ public class Prism : MonoBehaviour
     public void calculateImageLine(LineEquation line1,LineEquation line2){
         float incidentAngle = calculateAngle(line1.getPoints(),line2.getPoints(),true);
         float refractedAngle1 = radToDeg((float)Math.Asin((float)Math.Sin(degToRad(incidentAngle))/getRefractiveIndex()));
+        LineEquation refractedRay = rotatedLine(incidentAngle,line1,line1.pointOfIntersection(line2));
+
+        Debug.LogError("EHERHE");
+        drawLine.drawLine(refractedRay);
         float refractedAngle2 = getAngleOfPrism()-refractedAngle1;
         float emergentAngle = radToDeg((float)Math.Asin(getRefractiveIndex()*(float)Math.Sin(degToRad(refractedAngle2))));
         float angleOfDeviation = incidentAngle + emergentAngle - getAngleOfPrism();
@@ -159,6 +164,21 @@ public class Prism : MonoBehaviour
     }
     public float radToDeg(float rad){
         return(rad*180f/(float)Math.PI);
+    }
+
+    LineEquation rotatedLine(float angle,LineEquation l,Vector3 point){
+        LineEquation l2 = new LineEquation();
+        float rad = degToRad(angle);
+        float a = l.b*(float)Math.Sin(rad)+l.a*(float)Math.Cos(rad);
+        float b = l.b*(float)Math.Cos(rad)-l.a*(float)Math.Sin(rad);
+        float c = l.a*point.x+l.b*point.y+l.c-a-b;
+        l2.a = a;
+        l2.b = b;
+        l2.c = c;
+        l2.p1 = point;
+        Debug.LogError(l.getConstants().ToString());
+        Debug.LogError(l2.getConstants().ToString());
+        return l2;
     }
 
 
