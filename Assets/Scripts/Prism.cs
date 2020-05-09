@@ -20,7 +20,7 @@ public class Prism : MonoBehaviour
         Debug.LogError(circleRadius());
     }
     void setPosition(Vector3 position){
-        gameObject.transform.position = position;
+        gameObject.transform.position = new Vector3(position.x,position.y,gameObject.transform.position.z);
         isSelected = false;
     }
 
@@ -57,7 +57,7 @@ public class Prism : MonoBehaviour
             Vector3 meshVertx = transform.TransformPoint(meshVert);
             Debug.LogError(meshVertx);
 
-            meshVertx.z = board.transform.position.z;
+            meshVertx.z = 0.2f;
             vertices.Add(meshVertx);
             Debug.LogError(meshVertx);
 
@@ -132,6 +132,9 @@ public class Prism : MonoBehaviour
                 angle-=360f;
             }
         }
+        if(angle>180){
+            angle = 360f-angle;
+        }
         if(wrtNormal){
         if(angle>90){
             return(angle-90f);
@@ -146,15 +149,60 @@ public class Prism : MonoBehaviour
     }
     // line1, line2, and line3 are the equations of line and the planes of the prism
     // All intermediate angles are in degrees.
-    public void calculateImageLine(LineEquation line1,LineEquation line2){
-        float incidentAngle = calculateAngle(line1.getPoints(),line2.getPoints(),true);
+    public void calculateImageLine(LineEquation line1,LineEquation line2,List<LineEquation> prismLineEquations){
+        // float incidentAngle = calculateAngle(line1.getPoints(),line2.getPoints(),true);
+        Debug.LogError(line1.getConstants().ToString()+" "+line2.getConstants().ToString());
+        float incidentAngle = 90f-line1.angleBetween(line2);
         float refractedAngle1 = radToDeg((float)Math.Asin((float)Math.Sin(degToRad(incidentAngle))/getRefractiveIndex()));
-        LineEquation refractedRay = rotatedLine(incidentAngle,line1,line1.pointOfIntersection(line2));
+        Debug.LogError("RefractedAngle"+refractedAngle1);
+        LineEquation refractedRay = rotatedLine(-90+refractedAngle1,line1,line2.p2);//works
+        // LineEquation refractedRay = rotatedLine(refractedAngle1-incidentAngle,line2,line2.pointOfIntersection(line1));
+        LineEquation refractedRaytry = rotatedLine(-refractedAngle1+incidentAngle,line2,line2.pointOfIntersection(line1));
+        LineEquation normal1 = rotatedLine(90f,line1,line1.pointOfIntersection(line2));
+        if(refractedRaytry.angleBetween(normal1)<refractedRay.angleBetween(normal1)){
+            refractedRay = refractedRaytry;
+        }
 
-        Debug.LogError("EHERHE");
+        
+        int minPos = 0;
+        float minDist = 10000f;
+        int i = 0;
+        foreach(LineEquation l in prismLineEquations){
+            float dist = line1.perpDistance(refractedRay.pointOfIntersection(l));
+            Debug.LogError(dist);
+                    if(minDist>dist&&dist>0.01f){
+                        minPos = i;
+                        minDist = dist;
+                    }
+                    i++;
+                }
+        Debug.LogError(minDist);
+        refractedRay.p2 = refractedRay.pointOfIntersection(prismLineEquations[minPos]);
+        refractedRay.p2.z = refractedRay.p1.z;
         drawLine.drawLine(refractedRay);
-        float refractedAngle2 = getAngleOfPrism()-refractedAngle1;
-        float emergentAngle = radToDeg((float)Math.Asin(getRefractiveIndex()*(float)Math.Sin(degToRad(refractedAngle2))));
+        // drawLine.drawLine(refractedRay1);
+        float refractedAngle2 =90f-refractedRay.angleBetween(prismLineEquations[minPos]);
+        float emergentAngle;
+        if(Math.Sin(degToRad(refractedAngle2))*getRefractiveIndex()<1){
+        emergentAngle = radToDeg((float)Math.Asin((float)Math.Sin(degToRad(refractedAngle2))*getRefractiveIndex()));
+        }
+        else{
+            Debug.LogError("TIRRR");
+            emergentAngle = refractedAngle2;
+        }
+        Debug.LogError("RF:"+refractedAngle2);
+        Debug.LogError("RF:"+Math.Sin(degToRad(refractedAngle2)));
+        Debug.LogError("RF:"+degToRad(refractedAngle2)*getRefractiveIndex());
+        Debug.LogError(emergentAngle);
+        LineEquation refractedRay2 = rotatedLine(refractedAngle2-emergentAngle,refractedRay,refractedRay.pointOfIntersection(prismLineEquations[minPos]));
+        LineEquation refractedRay3 = rotatedLine(-refractedAngle2+emergentAngle,refractedRay,refractedRay.pointOfIntersection(prismLineEquations[minPos]));
+        // drawLine.drawLine(refractedRay2);
+        if(refractedRay2.angleBetween(prismLineEquations[minPos])>refractedRay3.angleBetween(prismLineEquations[minPos])){
+        drawLine.drawLine(refractedRay3);
+        }
+        else{
+            drawLine.drawLine(refractedRay2);
+        }
         float angleOfDeviation = incidentAngle + emergentAngle - getAngleOfPrism();
     }
 
@@ -176,8 +224,11 @@ public class Prism : MonoBehaviour
         l2.b = b;
         l2.c = c;
         l2.p1 = point;
-        Debug.LogError(l.getConstants().ToString());
-        Debug.LogError(l2.getConstants().ToString());
+        l2.p2 = new Vector3();
+        l2.p2.x = point.x-20;
+        l2.p2.y = ((-a*point.x*(-20))-c)/b;
+        l2.p2.z = 0.2f;
+        l2.p1.z = 0.2f;
         return l2;
     }
 

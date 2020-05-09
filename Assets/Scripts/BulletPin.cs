@@ -44,3 +44,6 @@ public class BulletPin : MonoBehaviour
     
 
 }
+
+//Image same line
+//1st image theek karo

@@ -17,7 +17,28 @@ public class DrawLine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+        
+    }
+    
+    public void drawLine(LineEquation l){
+        
+        currentLine = Instantiate(lineObject);
+        pencilLine = currentLine.GetComponent<PencilLine>();
+        currentLine.transform.SetParent(gameObject.transform);
+        currentLine.transform.localPosition = new Vector3(100,110,110);
+        currentLine.transform.position = gameObject.transform.position;
+        line = currentLine.GetComponent<LineRenderer>();
+        l.p1.z=0.1f;
+        l.p2.z=0.1f;
+        line.SetPosition(0,l.p1);
+        line.SetPosition(1,l.p2);
+    }
+
+    void OnMouseDown()
+    {
         mZCoordinate = gameObject.transform.position.z;
+        prismLineEquations = new List<LineEquation>();
         List<Vector3> prismVertices = prism.getVertices();
         LineEquation l1 = new LineEquation();
         l1.setConstants(prismVertices[0],prismVertices[1]);
@@ -28,22 +49,6 @@ public class DrawLine : MonoBehaviour
         prismLineEquations.Add(l1);
         prismLineEquations.Add(l2);
         prismLineEquations.Add(l3);
-        
-    }
-
-    public void drawLine(LineEquation l){
-        currentLine = Instantiate(lineObject);
-        pencilLine = currentLine.GetComponent<PencilLine>();
-        currentLine.transform.SetParent(gameObject.transform);
-        currentLine.transform.localPosition = new Vector3(100,110,110);
-        currentLine.transform.position = gameObject.transform.position;
-        line = currentLine.GetComponent<LineRenderer>();
-        line.SetPosition(0,l.p1);
-        line.SetPosition(1,new Vector3(200,(-l.c-200*l.a)/l.b,0.1f));
-    }
-
-    void OnMouseDown()
-    {
         currentLine = Instantiate(lineObject);
         pencilLine = currentLine.GetComponent<PencilLine>();
         currentLine.transform.SetParent(gameObject.transform);
@@ -109,7 +114,7 @@ public class DrawLine : MonoBehaviour
                         LineEquation l1 = new LineEquation();
                         l1.setConstants(pencilLine.vertices[0],point);
                         line.SetPosition(1,new Vector3(point.x,point.y,hit.point.z+0.1f));
-                        prism.calculateImageLine(l,l1);
+                        prism.calculateImageLine(l,l1,prismLineEquations);
                         hasSnapped = true;
                     }
                 }

@@ -13,7 +13,7 @@ public class ObjectScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        convexLens = FindObjectOfType<ConvexLensNew>().gameObject;
+        // convexLens = FindObjectOfType<ConvexLensNew>().gameObject;
         //dragController = FindObjectOfType<DragController>().gameObject;
     }
 

@@ -9,10 +9,9 @@ public class Plane : MonoBehaviour
     {
         
     }
-    XRSurfaceController xRSurface;
+  
     public void ActivateObject(){
-        xRSurface = GetComponent<XRSurfaceController>();
-        xRSurface.enabled = true;
+       
     }
 
     // Update is called once per frame

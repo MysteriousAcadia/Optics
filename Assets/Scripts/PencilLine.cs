@@ -23,7 +23,7 @@ public class PencilLine : MonoBehaviour
     public void drawLine(Vector3 a, Vector3 b){
         lineRenderer.SetPosition(0,a);
         lineRenderer.SetPosition(1,b);
-        lineEquation.setConstants(a,b);
+        // lineEquation.setConstants(a,b);
     }
 
  

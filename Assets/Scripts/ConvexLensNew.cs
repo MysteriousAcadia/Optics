@@ -7,7 +7,12 @@ public class ConvexLensNew : MonoBehaviour
 {
     GameObject objectNeedle;
     GameObject objectScreen;
+
+    public ConvexMirror convexMirror;
+    public ConcaveLens concaveLens;
     
+    [SerializeField]public bool isMirrorPlaced = false;
+    [SerializeField]public bool isLensPlaced = true;
 
     [SerializeField] float focalLength = 2;
 
@@ -25,13 +30,14 @@ public class ConvexLensNew : MonoBehaviour
     //Infinity for object will be regarded as -100 and for image is 100
     float objectPos;
     float screenPos;
+    bool imageVisible = false;
 
     float uValue = 3;
     float vValue = 3;
     float magnification;
 
     bool toDisplayImage = false;
-    bool isPositionChanged = false;
+    public bool isPositionChanged = false;
 
     ScalePoints[] scalePoints;
 
@@ -51,14 +57,16 @@ public class ConvexLensNew : MonoBehaviour
 
         gameOVir = Instantiate(virImage, new Vector3(-2000f, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z), Quaternion.identity, opticalBench.transform);
 
-        
-        gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1.4f, objectNeedle.transform.localPosition.z);
+        gameO.SetActive(false);
+        gameOVir.SetActive(false);
+        gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1.05f, objectNeedle.transform.localPosition.z);
         
         gameOVir.transform.Rotate(90, 0, 0);
         gameO.transform.Rotate(180, 0, 0);
 
 
     }
+    float oVal = 4f;
 
     // Update is called once per frame
     void Update()
@@ -70,6 +78,7 @@ public class ConvexLensNew : MonoBehaviour
         }
 
         uValue = objectPos;
+        // uValue = gameO.transform.localPosition.x-objectPos;
         vValue = 0 - screenPos;
 
         textNeedle.text = uValue.ToString();
@@ -97,7 +106,7 @@ public class ConvexLensNew : MonoBehaviour
 
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1.4f, objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1.05f, objectNeedle.transform.localPosition.z);
 
            
             if (magnification < 0)
@@ -122,7 +131,7 @@ public class ConvexLensNew : MonoBehaviour
             
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1.4f , objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1.05f , objectNeedle.transform.localPosition.z);
 
            
             
@@ -152,7 +161,7 @@ public class ConvexLensNew : MonoBehaviour
             
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1.4f, objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1.05f, objectNeedle.transform.localPosition.z);
 
 
             if (magnification < 0)
@@ -190,26 +199,74 @@ public class ConvexLensNew : MonoBehaviour
 
             magnification = -testVal / uValue;
 
-            gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, gameOVir.transform.localScale.y, magnification * 100);
+            // gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, gameOVir.transform.localScale.y, magnification * 100);
+            gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, magnification,gameOVir.transform.localScale.z );
 
             gameOVir.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
+            gameOVir.SetActive(true);
 
             
-            if (magnification < 0)
-            {
-                gameOVir.transform.localEulerAngles = new Vector3(90, 0, 0);
-            }
-            else
-            {
-                gameOVir.transform.localEulerAngles = new Vector3(270, 0, 0);
-            }
+            // if (magnification < 0)
+            // {
+                gameOVir.transform.localEulerAngles = new Vector3(0, 0, 0);
+            // }
+            // else
+            // {
+            //     gameOVir.transform.localEulerAngles = new Vector3(270, 0, 0);
+            // }
 
             gameO.SetActive(false);
         }
 
+    if(!imageVisible){
+        gameO.SetActive(false);
+        gameOVir.SetActive(false);
+    }
+    //Part for calculating resultant image with convex mirror.
+    if(isMirrorPlaced){
+        if(convexMirror==null){
+        // gameO.transform.localPosition = new Vector3(-gameO.transform.localPosition.x,gameO.transform.localPosition.y,gameO.transform.localPosition.z);
+        }
+        else{
+            float distBetweenLens = convexMirror.transform.localPosition.x-gameObject.transform.localPosition.x;
+            // float ultimateimgPos = distBetweenLens-1.5f;
+            // float actualObjectPos = 1/((1/-focalLength)+(1/ultimateimgPos));
+            Debug.LogError(distBetweenLens+"LENS");
+            Debug.LogError(gameO.transform.localPosition.x+"IMG");
+            float objectPoss = -gameO.transform.localPosition.x+distBetweenLens;
+            Debug.LogError(objectPoss+"u(should be opp)");
+            float imagePos = distBetweenLens-(1/((1/convexMirror.focalLenght)-(1/objectPoss)));
+            Debug.LogError(imagePos+"imgpos");
+            float finalImagePos = 1 / ((1 / (imagePos)) + (1 /focalLength));
+            gameO.transform.localPosition = new Vector3(finalImagePos,gameO.transform.localPosition.y,gameO.transform.localPosition.z);
+
+        }
+    }
+
+    //To find Resultant image with concave lens.
+    if(isLensPlaced){
+        if(concaveLens!=null){
+            float distBetweenLens = concaveLens.transform.localPosition.x-gameObject.transform.localPosition.x;
+            // float ultimateimgPos = distBetweenLens-1.5f;
+            // float actualObjectPos = 1/((1/-focalLength)+(1/ultimateimgPos));
+            Debug.LogError(distBetweenLens+"LENS");
+            Debug.LogError(gameO.transform.localPosition.x+"IMG");
+            float objectPoss = gameO.transform.localPosition.x-distBetweenLens;
+            Debug.LogError(objectPoss+"u(should be opp)");
+            float imagePos = distBetweenLens+(1/((1/-2f)-(1/objectPoss)));
+            // float imagePos = distBetweenLens+(-2*objectPoss)/(-2+objectPoss);
+            Debug.LogError(imagePos+"imgpos");
+            // float finalImagePos = 1 / ((1 / (imagePos)) + (1 /focalLength));
+            gameO.transform.localPosition = new Vector3(imagePos,gameO.transform.localPosition.y,gameO.transform.localPosition.z);
+
+        }
+    }
         
         isPositionChanged = false;
     }
+    
+
+    
 
 
     public void ChangeObjectPosition()
@@ -234,6 +291,7 @@ public class ConvexLensNew : MonoBehaviour
         }
 
         newPos = (Mathf.Round(newPos * 10)) / 10;
+        Debug.LogError("CHange");
 
         objectNeedle.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         objectPos = newPos;
@@ -263,8 +321,13 @@ public class ConvexLensNew : MonoBehaviour
         }
 
         newPos = (Mathf.Round(newPos * 10)) / 10;
-
+        Debug.LogError("CHange");
         objectScreen.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         screenPos = newPos;
+    }
+
+    public void switchView(){
+        imageVisible = !imageVisible;
+        isPositionChanged = true;
     }
 }

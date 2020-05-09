@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class ConcaveMirror : MonoBehaviour
 {
+    public
     GameObject objectNeedle;
-    GameObject objectScreen;
+    public GameObject objectScreen;
     
 
     [SerializeField] float focalLength = 2;
@@ -52,7 +53,7 @@ public class ConcaveMirror : MonoBehaviour
         gameOVir = Instantiate(virImage, new Vector3(-2000f, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z), Quaternion.identity, opticalBench.transform);
 
         
-        gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 0.48f, objectNeedle.transform.localPosition.z);
+        gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
         
         gameOVir.transform.Rotate(90, 0, 0);
         gameO.transform.Rotate(180, 0, 0);
@@ -80,7 +81,7 @@ public class ConcaveMirror : MonoBehaviour
         //Object at infinity
         if (uValue == 1000)
         {
-            gameO.transform.localPosition = new Vector3(focalLength, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
+            // gameO.transform.localPosition = new Vector3(focalLength, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         }
 
         //Object behind C
@@ -97,7 +98,7 @@ public class ConcaveMirror : MonoBehaviour
 
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 0.48f, objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
 
            
             if (magnification < 0)
@@ -122,7 +123,7 @@ public class ConcaveMirror : MonoBehaviour
             
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 0.48f , objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1f , objectNeedle.transform.localPosition.z);
 
            
             
@@ -152,7 +153,7 @@ public class ConcaveMirror : MonoBehaviour
             
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 0.48f, objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
 
 
             if (magnification < 0)
@@ -190,19 +191,22 @@ public class ConcaveMirror : MonoBehaviour
 
             magnification = -testVal / uValue;
 
-            gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, gameOVir.transform.localScale.y, magnification * 100);
+            // gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, gameOVir.transform.localScale.y, gameOVir.transform.localScale.z);
+            gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, magnification, gameOVir.transform.localScale.z);
 
             gameOVir.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
+            // gameOVir.transform.localPosition = new Vector3(-testVal, magnification, gameOVir.transform.localPosition.z);
+
 
             
-            if (magnification < 0)
-            {
-                gameOVir.transform.localEulerAngles = new Vector3(90, 0, 0);
-            }
-            else
-            {
-                gameOVir.transform.localEulerAngles = new Vector3(270, 0, 0);
-            }
+            // if (magnification < 0)
+            // {
+                gameOVir.transform.localEulerAngles = new Vector3(0, 0, 0);
+            // }
+            // else
+            // {
+            //     gameOVir.transform.localEulerAngles = new Vector3(270, 0, 0);
+            // }
 
             gameO.SetActive(false);
         }
@@ -232,11 +236,17 @@ public class ConcaveMirror : MonoBehaviour
         {
             newPos = 5f;
         }
+        Debug.LogError(newPos.ToString()+" "+screenPos.ToString());
+        // if(newPos+screenPos>0.1f){
+        //     Debug.LogError("Object");
+        //     // slider.value = (screenPos+0.1f)/5;
+        //     newPos = -screenPos-0.1f;
+        // }
 
-        newPos = (-Mathf.Round(newPos * 10)) / 10;
+        newPos = ((-Mathf.Round(newPos * 10)) / 10);
 
         objectNeedle.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
-        objectPos = newPos;
+        objectPos = -gameObject.transform.localPosition.x+newPos;
     }
 
     public void ChangeScreenPosition()
@@ -252,6 +262,8 @@ public class ConcaveMirror : MonoBehaviour
 
         newPos = newPos - 5;
 
+        // if(newPos<)
+
         if (newPos > -0.2)
         {
             newPos = -0.2f;
@@ -261,10 +273,15 @@ public class ConcaveMirror : MonoBehaviour
         {
             newPos = -5f;
         }
+        // if(newPos-objectPos>-0.1f){
+        //     Debug.LogError("Screen");
+        //     // slider.value = 1- (-objectPos+0.3f)/5f;
+        //     newPos = objectPos-0.3f;
+        // }
 
         newPos = (Mathf.Round(newPos * 10)) / 10;
 
         objectScreen.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
-        screenPos = newPos;
+        screenPos = -gameObject.transform.localPosition.x+newPos;
     }
 }

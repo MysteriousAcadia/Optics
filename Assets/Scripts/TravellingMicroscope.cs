@@ -6,12 +6,16 @@ using UnityEngine.UI;
 
 public class TravellingMicroscope : MonoBehaviour
 {
-    public float focalLength = 0.2f;
+    public float focalLength = 1.2f;
     List<GameObject> onStage = new List<GameObject>();
+    List<Image> onStageView = new List<Image>();
     GameObject underObservation;
     public Slider horizontal,vertical;
     public Text textHorizontal, textVertical;
     public GameObject horizontalSlider, verticalSlider, plane, glassSlab, sprinkles;
+    public GameObject microscopeView;
+    public Image crossImage,sprinklesImage,blurImage;
+    public bool isMicroscopeViewVisible = false;
 
     public void MoveSliderVertically(){
         float slide = vertical.value;
@@ -31,12 +35,18 @@ public class TravellingMicroscope : MonoBehaviour
         horizontalSlider.transform.localPosition = new Vector3(horizontalSlider.transform.localPosition.x,finalDist,horizontalSlider.transform.localPosition.z);
 
     }
+    public void ToggleView(){
+        isMicroscopeViewVisible = !isMicroscopeViewVisible;
+        microscopeView.SetActive(isMicroscopeViewVisible);
+    }
     
     // Start is called before the first frame update
     void Start()
     {
-        PlaceImage();
+      isMicroscopeViewVisible = false;
+      microscopeView.SetActive(false);  
     }
+
 
     void CalculateImage(){
         bool isGlassSlabPresent = false;
@@ -45,7 +55,7 @@ public class TravellingMicroscope : MonoBehaviour
         for(int i = onStage.Count-1;i>=0;i--){
             GameObject gameObject = onStage[i];
             if(gameObject.name=="GlassSlab"){
-                Debug.LogError("PREENT");
+                Debug.LogError("PREENT"+i);
                 isGlassSlabPresent = true;
                 thickness = gameObject.GetComponent<GlassSlab>().thickness;
                 index = gameObject.GetComponent<GlassSlab>().refractiveIndex;
@@ -54,17 +64,34 @@ public class TravellingMicroscope : MonoBehaviour
             }
             if(!isGlassSlabPresent){
                 Vector3 yPos1 = verticalSlider.transform.position;
-                Vector3 yPoss2 = plane.transform.position;
-                gameObject.GetComponent<Cross>().updateBlur(0.9f+focalLength+thickness*index+(yPoss2.y-yPos1.y));
+                Vector3 yPoss2 = gameObject.transform.position;
                 Debug.LogError("SPRINL:E");
-                Debug.LogError(0.9f+focalLength+thickness*index+(yPoss2.y-yPos1.y));
+                Material mat = Instantiate(blurImage.material);
+                float blurAmt = focalLength+thickness*(index-1)+(yPoss2.y-yPos1.y);
+                if(blurAmt<0.001f && blurAmt>-0.001f){
+                mat.SetFloat("_Size",0);
+                }
+                else{
+                mat.SetFloat("_Size",blurAmt*8);                    
+                }                blurImage.material = mat;
+                Debug.LogError(focalLength+thickness*(index-1)+(yPoss2.y-yPos1.y));
+                break;
                 
             }
             else{
                 Vector3 yPos1 = verticalSlider.transform.position;
-                Vector3 yPoss2 = plane.transform.position;
-                gameObject.GetComponent<Cross>().updateBlur(0.9f+focalLength+thickness*index+(yPoss2.y-yPos1.y));
-                Debug.LogError(0.9f+focalLength+focalLength+thickness*index+(yPoss2.y-yPos1.y));
+                Vector3 yPoss2 = gameObject.transform.position;
+                Material mat = Instantiate(blurImage.material);
+                float blurAmt = focalLength+thickness*(index-1)+(yPoss2.y-yPos1.y);
+                if(blurAmt<0.001f && blurAmt>-0.001f){
+                mat.SetFloat("_Size",0);
+                }
+                else{
+                mat.SetFloat("_Size",blurAmt*8);                    
+                }
+                blurImage.material = mat;
+                Debug.LogError(focalLength+thickness*index+(yPoss2.y-yPos1.y));
+                break;
             }
 
         }
@@ -75,12 +102,25 @@ public class TravellingMicroscope : MonoBehaviour
         CalculateImage();
     }
     public void PlaceImage(){
+        plane.SetActive(true);
+        Image crossImag = Instantiate(crossImage);
+        crossImag.transform.SetParent(microscopeView.transform);
+        crossImage.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
+
+        blurImage.transform.SetAsLastSibling();
         onStage.Add(plane);
+        onStageView.Add(crossImag);
+        
         CalculateImage();
     }
     public void PlaceSprinkle(){
         sprinkles.SetActive(true);
         onStage.Add(sprinkles);
+        Image sprinklesImag = Instantiate(sprinklesImage);
+        sprinklesImag.transform.SetParent(microscopeView.transform);
+        crossImage.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
+        onStageView.Add(sprinklesImag);
+        blurImage.transform.SetAsLastSibling();
         CalculateImage();
     }
 
@@ -92,3 +132,5 @@ public class TravellingMicroscope : MonoBehaviour
 
     }
 }
+
+//focalLength+thickness*index+(yPoss2.y-yPos1.y)

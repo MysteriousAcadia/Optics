@@ -9,12 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: ddbd1473aad844a59b2fdca5619f9a9e
   - enabled: 0
-    path: Assets/Main.unity
-    guid: 57e3f7a8b34a84527acd119dc4e3096d
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/Experiment1.unity
-    guid: de913cd4ab3ff4da483b6eff0975303e
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/RFWater.unity
     guid: 62097cce58a674f8cb37015a57d08c6f
+  - enabled: 1
+    path: Assets/Scenes/ConvexLensFL.unity
+    guid: a406010e59b2e4334946e6895d3b22aa
   m_configObjects: {}

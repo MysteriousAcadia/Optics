@@ -12,7 +12,7 @@ public class ObjectNeedle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        convexLens = FindObjectOfType<ConvexLensNew>().gameObject;
+        // convexLens = FindObjectOfType<ConcaveLens>().gameObject;
         //dragController = FindObjectOfType<DragController>().gameObject;
     }
 

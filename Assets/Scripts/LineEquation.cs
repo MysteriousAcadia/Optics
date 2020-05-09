@@ -43,17 +43,48 @@ public class LineEquation{
         return points;
     }
 
-    public float angleBetween(LineEquation l1){
-        float tanAngle = (a*l1.b-b*l1.a)/(b*l1.b+a*l1.a);
+     public float angleBetween(LineEquation l1){
+        float m1 = -l1.a/l1.b;
+        float m2 = -a/b;
+        float mod = Math.Abs((m2-m1)/(1+m1*m2));
+        float newAngle = Mathf.Atan2(mod,1);
+        Debug.LogError("mod: "+mod+" NewANgle: "+newAngle);
+        float tanAngle = (-a*l1.b+b*l1.a)/(-b*l1.b+a*l1.a);
         float angle = Mathf.Atan2(tanAngle,1);
-        return angle*180f/Mathf.PI;
+        return newAngle*180f/Mathf.PI;
     }
 
     public Vector3 pointOfIntersection(LineEquation l1){
-        Vector3 ans = new Vector3();
-        ans.z = p1.z;
-        ans.x = (c*l1.b-b*l1.c)/(b*l1.a-a*l1.b);
-        return ans;
+        // Vector3 ans = new Vector3();
+
+        // ans.z = p1.z;
+        // ans.x = ((l1.c*b)-(c*l1.b))/(l1.b*a-l1.a*b);
+        // ans.y = (+l1.c+(l1.a*ans.x))/-l1.b;
+        // return ans;
+         // Line AB represented as a1x + b1y = c1  
+        double a1 = l1.p2.y - l1.p1.y; 
+        double b1 = l1.p1.x - l1.p2.x; 
+        double c1 = a1 * (l1.p1.x) + b1 * (l1.p1.y); 
+  
+        // Line CD represented as a2x + b2y = c2  
+        double a2 = p2.y - p1.y; 
+        double b2 = p1.x - p2.x; 
+        double c2 = a2 * (p1.x) + b2 * (p1.y); 
+  
+        double determinant = a1 * b2 - a2 * b1; 
+  
+        if (determinant == 0) 
+        { 
+            // The lines are parallel. This is simplified  
+            // by returning a pair of FLT_MAX  
+            return new Vector3(0,0,0); 
+        } 
+        else
+        { 
+            double x = (b2 * c1 - b1 * c2) / determinant; 
+            double y = (a1 * c2 - a2 * c1) / determinant; 
+            return new Vector3((float)x,(float) y,p1.z); 
+        } 
     }
     public float getSlope(){
         return(-a/b);
