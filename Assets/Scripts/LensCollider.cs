@@ -68,3 +68,6 @@ public class LensCollider : MonoBehaviour
     }
   
 }
+
+//above beaker 0.02627117 1.333542 2.189277
+//lens away 0.02007225 -1.903542 2.832467
