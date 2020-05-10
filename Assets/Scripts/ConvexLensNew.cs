@@ -14,7 +14,7 @@ public class ConvexLensNew : MonoBehaviour
     [SerializeField]public bool isMirrorPlaced = false;
     [SerializeField]public bool isLensPlaced = true;
 
-    [SerializeField] float focalLength = 2;
+    [SerializeField] public float focalLength = 2;
 
     [SerializeField] Text textNeedle;
     [SerializeField] Text textScreen;
@@ -32,8 +32,8 @@ public class ConvexLensNew : MonoBehaviour
     float screenPos;
     bool imageVisible = false;
 
-    float uValue = 3;
-    float vValue = 3;
+    float uValue = 2;
+    float vValue = 2;
     float magnification;
 
     bool toDisplayImage = false;
@@ -50,8 +50,8 @@ public class ConvexLensNew : MonoBehaviour
         objectNeedle = FindObjectOfType<ObjectNeedle>().gameObject;
         objectScreen = FindObjectOfType<ObjectScreen>().gameObject;
 
-        textNeedle.text = "4";
-        textScreen.text = "4";
+        textNeedle.text = "2";
+        textScreen.text = "2";
 
         gameO = Instantiate(image, new Vector3(4f, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z), Quaternion.identity, opticalBench.transform);
 
@@ -291,7 +291,6 @@ public class ConvexLensNew : MonoBehaviour
         }
 
         newPos = (Mathf.Round(newPos * 10)) / 10;
-        Debug.LogError("CHange");
 
         objectNeedle.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         objectPos = newPos;

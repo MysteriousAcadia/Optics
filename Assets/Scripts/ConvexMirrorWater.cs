@@ -9,7 +9,9 @@ public class ConvexMirrorWater : MonoBehaviour
     GameObject objectScreen;
     
 
-    [SerializeField] float focalLength = 3f;
+    private float focalLength = 3f;
+    [SerializeField] float lensFocalLength = 3f;
+    [SerializeField] float liquidIndec = 1.33f;
 
     [SerializeField] Text textNeedle;
     [SerializeField] Text textScreen;
@@ -28,7 +30,7 @@ public class ConvexMirrorWater : MonoBehaviour
     float vValue = 0.1f;
     float magnification;
 
-    bool isPositionChanged = false;
+    public bool isPositionChanged = false;
 
     GameObject gameO;
     GameObject gameOVir;
@@ -43,7 +45,7 @@ public class ConvexMirrorWater : MonoBehaviour
 
         gameO = Instantiate(image, new Vector3(objectNeedle.transform.localPosition.y, 4f, objectNeedle.transform.localPosition.z), Quaternion.Euler(new Vector3(0, 90, 90)), opticalBench.transform);
         gameO.transform.localScale = new Vector3(1,1,1);
-
+        focalLength = lensFocalLength/2;
         gameOVir = Instantiate(virImage, new Vector3(-2000f, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z), Quaternion.identity, opticalBench.transform);
 
         
@@ -52,14 +54,25 @@ public class ConvexMirrorWater : MonoBehaviour
             gameO.transform.localPosition =new Vector3(gameO.transform.localPosition.x, vValue,0.87f);
         gameOVir.transform.Rotate(0, 0, 90);
         gameOVir.SetActive(false);
+        gameO.SetActive(false);
         // gameO.transform.Rotate(0, 90, 180);
 
 
     }
+    bool isActive = true;
+    public void SetActive(bool isActive1){
+        this.isActive = isActive1;
+    }
+    
 
     // Update is called once per frame
     void Update()
     { 
+        if(!isActive){
+            gameO.SetActive(false);
+            gameOVir.SetActive(false);
+            return;
+        }
 
         if (!isPositionChanged)
         {
@@ -231,17 +244,19 @@ public class ConvexMirrorWater : MonoBehaviour
         isPositionChanged = false;
     }
 
-    public void SwitchLiquid(){
+    public void SwitchLiquid(float rf){
         gameO.SetActive(false);
-        if(isWaterPresent){
+        if(rf==1f){
             gameO.SetActive(false);
-            textScreen.text = "CLick to add Water";
-            focalLength = 3f;
+            // textScreen.text = "CLick to add Water";
+            focalLength = lensFocalLength/2;
             
         }
         else{
-            textScreen.text = "CLick to remove Water";
-            focalLength = 4f;
+            // textScreen.text = "CLick to remove Water";
+            float newlensFocalLength = -2*lensFocalLength/0.33f;
+            focalLength = 3f*newlensFocalLength/(3f+newlensFocalLength);
+            focalLength = focalLength/2;
         }
         isWaterPresent = !isWaterPresent;
     }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7447400207949211066}
   - component: {fileID: 3475261074774961373}
+  - component: {fileID: 6059002360070667413}
   - component: {fileID: 2900171254849371949}
   m_Layer: 0
   m_Name: Plane Mirror
@@ -40,6 +41,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7782904697718400457}
   m_Mesh: {fileID: -4751081035905512126, guid: b5bff6de7f6237e4590d6a90c89833f0, type: 3}
+--- !u!114 &6059002360070667413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782904697718400457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d07592cf7724543c299f3c3ee7678343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &2900171254849371949
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -6,6 +6,8 @@ public class Dropper : MonoBehaviour
 {
     [SerializeField]
     GameObject liquidDrop;
+    public GameObject clamp;
+    public Transform origin;
 
 
     Vector3 objRelativeToCamera;
@@ -40,10 +42,10 @@ public class Dropper : MonoBehaviour
         transform.position = (getTouchAsWorldPoint() + objRelativeToCamera);
     }
   
-    void drops(Transform position)
+    public void drops()
     {
         GameObject drop;
-        if (!liquidDrop.activeInHierarchy)
-        drop = Instantiate(liquidDrop, position);
+        drop = Instantiate(liquidDrop,origin);
+        drop.transform.SetParent(clamp.transform);
     }
 }
