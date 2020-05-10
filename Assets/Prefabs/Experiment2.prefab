@@ -88,6 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3788724611078465087}
+  - component: {fileID: 6410439879508439367}
   m_Layer: 0
   m_Name: Experiment2
   m_TagString: Untagged
@@ -116,6 +117,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &6410439879508439367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202408190334882860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef51374f5b72d483caed0b41a66c6740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  start: {fileID: 1951464530915338615}
+  next: {fileID: 265589559771882997}
+  previous: {fileID: 6026052027074200022}
+  startText: {fileID: 1337304708593991954}
+  step: 0
+  concaveMirror: {fileID: 5676805303102924700}
+  objectNeedleSlider: {fileID: 4269613076373589623}
+  imageNeedleSlider: {fileID: 4269613076245453394}
+  isTutorialStarted: 0
 --- !u!1 &265589559771882997
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +256,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6410439879508439367}
         m_MethodName: nextStep
         m_Mode: 1
         m_Arguments:
@@ -2041,7 +2063,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6410439879508439367}
         m_MethodName: StartTutorial
         m_Mode: 1
         m_Arguments:
@@ -4287,7 +4309,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6410439879508439367}
         m_MethodName: previousStep
         m_Mode: 1
         m_Arguments:

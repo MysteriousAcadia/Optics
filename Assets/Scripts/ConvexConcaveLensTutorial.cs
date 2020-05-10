@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConcaveMirrorTutorial : MonoBehaviour
+public class ConvexConcaveLensTutorial : MonoBehaviour
 {
     public GameObject start,next,previous;
     public Text startText;
     public int step = 0;
     bool isStepChanged = false;
-    public ConcaveMirror concaveMirror;
+    public ConvexLensNew convexLensNew;
+    public OpticalBenchPlace opticalBenchPlace;
     float finalObjectNeedlePos = 1f;
     float finalImageNeedlePos = 1f;
     public Slider objectNeedleSlider;
@@ -49,16 +50,36 @@ public class ConcaveMirrorTutorial : MonoBehaviour
         }
         if(isStepChanged){
             if(step==0){
-                finalObjectNeedlePos = 0.4f;
-                finalImageNeedlePos = 0.2f;
+                finalObjectNeedlePos = 1f;
+                finalImageNeedlePos = 1f;
+                opticalBenchPlace.removeConcaveLens();
             }
             if(step==1){
+                convexLensNew.imageVisible = true;
                 finalObjectNeedlePos = 1f;
-                finalImageNeedlePos = 0.2f;
+                finalImageNeedlePos = 1f;
+                opticalBenchPlace.removeConcaveLens();
             }
             if(step==2){
-                finalObjectNeedlePos =1f;
-                finalImageNeedlePos =0.66f;
+                convexLensNew.imageVisible = true;
+                finalObjectNeedlePos = 1f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+                Debug.LogError(finalImageNeedlePos);
+                opticalBenchPlace.removeConcaveLens();
+            }
+            if(step==3){
+                convexLensNew.imageVisible = true;
+                finalObjectNeedlePos = 1f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+                opticalBenchPlace.addConcaveLens();
+
+            }
+            if(step==4){
+                convexLensNew.imageVisible = true;
+                opticalBenchPlace.addConcaveLens();
+                finalObjectNeedlePos = 1f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+
             }
             isStepChanged = false;
         }
@@ -84,7 +105,7 @@ public class ConcaveMirrorTutorial : MonoBehaviour
         
     }
     public void nextStep(){
-        if(step<2){
+        if(step<4){
             step++;
             isStepChanged = true;
         }
@@ -97,5 +118,3 @@ public class ConcaveMirrorTutorial : MonoBehaviour
         }
     }
 }
-
-

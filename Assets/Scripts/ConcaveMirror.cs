@@ -10,7 +10,7 @@ public class ConcaveMirror : MonoBehaviour
     public GameObject objectScreen;
     
 
-    [SerializeField] float focalLength = 2;
+    [SerializeField] public float focalLength = 2;
 
     [SerializeField] Text textNeedle;
     [SerializeField] Text textScreen;

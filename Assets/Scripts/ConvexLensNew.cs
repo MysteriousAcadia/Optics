@@ -14,7 +14,7 @@ public class ConvexLensNew : MonoBehaviour
     [SerializeField]public bool isMirrorPlaced = false;
     [SerializeField]public bool isLensPlaced = true;
 
-    [SerializeField] public float focalLength = 2;
+    [SerializeField] public float focalLength = 1f;
 
     [SerializeField] Text textNeedle;
     [SerializeField] Text textScreen;
@@ -30,7 +30,7 @@ public class ConvexLensNew : MonoBehaviour
     //Infinity for object will be regarded as -100 and for image is 100
     float objectPos;
     float screenPos;
-    bool imageVisible = false;
+    public bool imageVisible = false;
 
     float uValue = 2;
     float vValue = 2;
@@ -41,7 +41,7 @@ public class ConvexLensNew : MonoBehaviour
 
     ScalePoints[] scalePoints;
 
-    GameObject gameO;
+    public GameObject gameO;
     GameObject gameOVir;
 
     // Start is called before the first frame update
@@ -253,7 +253,7 @@ public class ConvexLensNew : MonoBehaviour
             Debug.LogError(gameO.transform.localPosition.x+"IMG");
             float objectPoss = gameO.transform.localPosition.x-distBetweenLens;
             Debug.LogError(objectPoss+"u(should be opp)");
-            float imagePos = distBetweenLens+(1/((1/-2f)-(1/objectPoss)));
+            float imagePos = distBetweenLens+(1/((1/-1f)-(1/objectPoss)));
             // float imagePos = distBetweenLens+(-2*objectPoss)/(-2+objectPoss);
             Debug.LogError(imagePos+"imgpos");
             // float finalImagePos = 1 / ((1 / (imagePos)) + (1 /focalLength));
@@ -320,7 +320,6 @@ public class ConvexLensNew : MonoBehaviour
         }
 
         newPos = (Mathf.Round(newPos * 10)) / 10;
-        Debug.LogError("CHange");
         objectScreen.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         screenPos = newPos;
     }

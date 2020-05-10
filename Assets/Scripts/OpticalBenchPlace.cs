@@ -59,4 +59,37 @@ public class OpticalBenchPlace : MonoBehaviour
         isPlaced = !isPlaced;
 
     }
+    public void addConvexMirror(){
+        convexMirrorStand.SetActive(true);
+        convexLens.isMirrorPlaced = true;
+        convexLens.convexMirror = convexMirrorStand.GetComponent<ConvexMirror>();
+        convexLens.isPositionChanged = true;
+        isPlaced = true;
+
+    }
+    public void removeConvexMirror(){
+        convexMirrorStand.SetActive(false);
+            convexLens.isMirrorPlaced = false;
+            convexLens.convexMirror = null; 
+            convexLens.isPositionChanged = true;
+            isPlaced = false;
+
+    }
+    public void addConcaveLens(){
+        concaveLensStand.SetActive(true);
+        convexLens.isLensPlaced = true;
+        convexLens.concaveLens = concaveLensStand.GetComponent<ConcaveLens>();
+        convexLens.isPositionChanged = true;
+        isPlaced = true;
+
+    }
+    public void removeConcaveLens(){
+        concaveLensStand.SetActive(false);
+            convexLens.isLensPlaced = false;
+            convexLens.concaveLens = null; 
+            convexLens.isPositionChanged = true;
+            isPlaced = false;
+
+
+    }
 }
