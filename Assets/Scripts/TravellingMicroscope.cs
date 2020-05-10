@@ -49,6 +49,8 @@ public class TravellingMicroscope : MonoBehaviour
 
 
     void CalculateImage(){
+                    Debug.LogError(sprinkles.transform.position.y-plane.transform.position.y+"Dbetsp");
+
         bool isGlassSlabPresent = false;
         float thickness = 0f;
         float index = 0f;
@@ -90,7 +92,7 @@ public class TravellingMicroscope : MonoBehaviour
                 mat.SetFloat("_Size",blurAmt*8);                    
                 }
                 blurImage.material = mat;
-                Debug.LogError(focalLength+thickness*index+(yPoss2.y-yPos1.y));
+                Debug.LogError(focalLength+thickness*(index-1)+(yPoss2.y-yPos1.y));
                 break;
             }
 
@@ -101,9 +103,10 @@ public class TravellingMicroscope : MonoBehaviour
         onStage.Add(glassSlab);
         CalculateImage();
     }
+    Image crossImag;
     public void PlaceImage(){
         plane.SetActive(true);
-        Image crossImag = Instantiate(crossImage);
+        crossImag = Instantiate(crossImage);
         crossImag.transform.SetParent(microscopeView.transform);
         crossImage.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
 
@@ -113,16 +116,44 @@ public class TravellingMicroscope : MonoBehaviour
         
         CalculateImage();
     }
+    Image sprinklesImag;
     public void PlaceSprinkle(){
         sprinkles.SetActive(true);
         onStage.Add(sprinkles);
-        Image sprinklesImag = Instantiate(sprinklesImage);
+        sprinklesImag = Instantiate(sprinklesImage);
         sprinklesImag.transform.SetParent(microscopeView.transform);
         crossImage.transform.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
         onStageView.Add(sprinklesImag);
         blurImage.transform.SetAsLastSibling();
         CalculateImage();
     }
+
+    public void displayMicroscopeView(){
+        isMicroscopeViewVisible = true;
+        microscopeView.SetActive(isMicroscopeViewVisible);
+    }
+
+    
+    public void hideMicroscopeView(){
+        isMicroscopeViewVisible = false;
+        microscopeView.SetActive(isMicroscopeViewVisible);
+    }
+    public void emptyWorkingPlace(){
+        onStage.Clear();
+        sprinkles.SetActive(false);
+        plane.SetActive(false);
+        glassSlab.SetActive(false);
+        foreach (Image item in onStageView){
+            Destroy(item.gameObject);
+        }
+        onStageView.Clear();
+        {
+            
+        }
+
+    }
+
+    
 
   
 

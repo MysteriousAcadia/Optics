@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GlassSlab : MonoBehaviour
 {
-    public float thickness = 0.3f;
+    public float thickness = 0.2f;
     public float refractiveIndex = 1.5f;
     GameObject underObservation;
     
