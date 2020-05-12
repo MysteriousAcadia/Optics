@@ -15,6 +15,8 @@ public class TravelMicroscopeTutorial : MonoBehaviour
     public Slider horizontalSlider;
     public Slider verticalSlider; 
     public bool isTutorialStarted = false;
+    public AudioSource audioSource;
+    public List<AudioClip> tutorialAudio;
        // Start is called before the first frame update
     public void StartTutorial()
     {
@@ -48,22 +50,22 @@ public class TravelMicroscopeTutorial : MonoBehaviour
             return;
         }
         if(isStepChanged){
-            if(step==0){
-                travellingMicroscope.emptyWorkingPlace();
-                travellingMicroscope.hideMicroscopeView();
-                finalHorizontalSlider = 0f;
-                finalVerticalSlider = 0f;
-                travellingMicroscope.hideMicroscopeView();
+            // if(step==0){
+            //     travellingMicroscope.emptyWorkingPlace();
+            //     travellingMicroscope.hideMicroscopeView();
+            //     finalHorizontalSlider = 0f;
+            //     finalVerticalSlider = 0f;
+            //     travellingMicroscope.hideMicroscopeView();
 
-            }
-            if(step==1){
+            // }
+            if(step==0){
                 travellingMicroscope.emptyWorkingPlace();
                 travellingMicroscope.hideMicroscopeView();
                 travellingMicroscope.PlaceImage();
                 finalHorizontalSlider = 0f;
                 finalVerticalSlider = 0f;
             }
-            if(step==2){
+            if(step==1){
                 travellingMicroscope.emptyWorkingPlace();
                 travellingMicroscope.displayMicroscopeView();
                 travellingMicroscope.PlaceImage();
@@ -71,43 +73,43 @@ public class TravelMicroscopeTutorial : MonoBehaviour
                 finalVerticalSlider = 0.246f;
                 
             }
-            if(step==3){
+            // if(step==3){
+            //     travellingMicroscope.emptyWorkingPlace();
+            //     travellingMicroscope.hideMicroscopeView();
+            //     travellingMicroscope.PlaceImage();
+            //     travellingMicroscope.PlaceGlassSlab();
+            //     finalHorizontalSlider = 0f;
+            //     finalVerticalSlider = 0.246f;
+
+            // }
+            if(step==2){
                 travellingMicroscope.emptyWorkingPlace();
-                travellingMicroscope.hideMicroscopeView();
+                travellingMicroscope.displayMicroscopeView();
                 travellingMicroscope.PlaceImage();
                 travellingMicroscope.PlaceGlassSlab();
                 finalHorizontalSlider = 0f;
-                finalVerticalSlider = 0.246f;
-
+                finalVerticalSlider = 0.336f;
+            }
+            // if(step==5){
+            //     travellingMicroscope.emptyWorkingPlace();
+            //     travellingMicroscope.hideMicroscopeView();
+            //     travellingMicroscope.PlaceImage();
+            //     travellingMicroscope.PlaceGlassSlab();
+            //     travellingMicroscope.PlaceSprinkle();
+            //     finalHorizontalSlider = 0f;
+            //     finalVerticalSlider = 0.336f;
+            // }
+            if(step==3){
+                travellingMicroscope.emptyWorkingPlace();
+                travellingMicroscope.displayMicroscopeView();
+                travellingMicroscope.PlaceImage();
+                travellingMicroscope.PlaceGlassSlab();
+                travellingMicroscope.PlaceSprinkle();
+                finalHorizontalSlider = 0f;
+                finalVerticalSlider = 0.508f;
             }
             if(step==4){
                 travellingMicroscope.emptyWorkingPlace();
-                travellingMicroscope.displayMicroscopeView();
-                travellingMicroscope.PlaceImage();
-                travellingMicroscope.PlaceGlassSlab();
-                finalHorizontalSlider = 0f;
-                finalVerticalSlider = 0.336f;
-            }
-            if(step==5){
-                travellingMicroscope.emptyWorkingPlace();
-                travellingMicroscope.hideMicroscopeView();
-                travellingMicroscope.PlaceImage();
-                travellingMicroscope.PlaceGlassSlab();
-                travellingMicroscope.PlaceSprinkle();
-                finalHorizontalSlider = 0f;
-                finalVerticalSlider = 0.336f;
-            }
-            if(step==6){
-                travellingMicroscope.emptyWorkingPlace();
-                travellingMicroscope.displayMicroscopeView();
-                travellingMicroscope.PlaceImage();
-                travellingMicroscope.PlaceGlassSlab();
-                travellingMicroscope.PlaceSprinkle();
-                finalHorizontalSlider = 0f;
-                finalVerticalSlider = 0.508f;
-            }
-            if(step==7){
-                travellingMicroscope.emptyWorkingPlace();
                 travellingMicroscope.hideMicroscopeView();
                 travellingMicroscope.PlaceImage();
                 travellingMicroscope.PlaceGlassSlab();
@@ -115,6 +117,12 @@ public class TravelMicroscopeTutorial : MonoBehaviour
                 finalHorizontalSlider = 0f;
                 finalVerticalSlider = 0.508f;
             }
+            start.SetActive(false);
+            previous.SetActive(false);
+            next.SetActive(false);
+            audioSource.clip = tutorialAudio[step];
+            audioSource.Play();
+            Invoke("OnAudioFinish",audioSource.clip.length);
             isStepChanged = false;
         }
         float needleDiff =horizontalSlider.value-finalHorizontalSlider;
@@ -139,7 +147,7 @@ public class TravelMicroscopeTutorial : MonoBehaviour
         
     }
     public void nextStep(){
-        if(step<7){
+        if(step<4){
             step++;
             isStepChanged = true;
         }
@@ -150,6 +158,12 @@ public class TravelMicroscopeTutorial : MonoBehaviour
             step--;
             isStepChanged = true;
         }
+    }
+    void OnAudioFinish(){
+        audioSource.Stop();
+        start.SetActive(true);
+        previous.SetActive(true);
+        next.SetActive(true);
     }
 }
 

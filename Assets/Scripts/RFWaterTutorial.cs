@@ -15,6 +15,8 @@ public class RFWaterTutorial : MonoBehaviour
     float finalVerticalSlider = 1f;
     public Slider verticalSlider; 
     public bool isTutorialStarted = false;
+     public AudioSource audioSource;
+    public List<AudioClip> tutorialAudio;
        // Start is called before the first frame update
 
        Vector3 lensOriginalPosition = new Vector3(0.03f,-2.58f,1.68f);
@@ -54,52 +56,71 @@ public class RFWaterTutorial : MonoBehaviour
         }
         if(isStepChanged){
             if(step==0){
+                // convexMirrorWater.SwitchLiquid(1f);
+                // finalVerticalSlider = 0.1f;
+                // convexLens.transform.localPosition = lensOriginalPosition;
+                // dropper.transform.localPosition = dropperOriginalPosition;
                 convexMirrorWater.SwitchLiquid(1f);
-                finalVerticalSlider = 0.1f;
+                finalVerticalSlider = 3f/8f;
                 convexLens.transform.localPosition = lensOriginalPosition;
                 dropper.transform.localPosition = dropperOriginalPosition;
 
             }
             if(step==1){
-                convexMirrorWater.SwitchLiquid(1f);
-                finalVerticalSlider = 3f/8f;
-                convexLens.transform.localPosition = lensOriginalPosition;
-                dropper.transform.localPosition = dropperOriginalPosition;
-            }
-            if(step==2){
-                convexMirrorWater.SwitchLiquid(1f);
-                finalVerticalSlider = 3f/8f;
-                convexLens.transform.localPosition = lensNewPosition;
-                dropper.transform.localPosition = dropperOriginalPosition;
-                
-            }
-            if(step==3){
-                convexMirrorWater.SwitchLiquid(1f);
-                finalVerticalSlider =3f/8f;
-                convexLens.transform.localPosition = lensNewPosition;
-                dropper.transform.localPosition = dropperNewPosition;
-
-            }
-            if(step==4){
+                // convexMirrorWater.SwitchLiquid(1f);
+                // finalVerticalSlider = 3f/8f;
+                // convexLens.transform.localPosition = lensOriginalPosition;
+                // dropper.transform.localPosition = dropperOriginalPosition;
                 convexMirrorWater.SwitchLiquid(1f);
                 finalVerticalSlider = 3f/8f;
                 convexLens.transform.localPosition = lensNewPosition;
                 dropper.transform.localPosition = dropperNewPosition;
                 dropper.GetComponent<Dropper>().drops();
             }
-            if(step==5){
-                convexMirrorWater.SwitchLiquid(1.3f);
-                finalVerticalSlider = 3f/8f;
-                convexLens.transform.localPosition = lensOriginalPosition;
-                dropper.transform.localPosition = dropperOriginalPosition;
-            }
-            if(step==6){
+            if(step==2){
                 convexMirrorWater.SwitchLiquid(1.3f);
                 finalVerticalSlider = 3.6f/8f;
                 convexLens.transform.localPosition = lensOriginalPosition;
                 dropper.transform.localPosition = dropperOriginalPosition;
+                // convexMirrorWater.SwitchLiquid(1f);
+                // finalVerticalSlider = 3f/8f;
+                // convexLens.transform.localPosition = lensNewPosition;
+                // dropper.transform.localPosition = dropperOriginalPosition;
+                
             }
+            // if(step==3){
+            //     convexMirrorWater.SwitchLiquid(1f);
+            //     finalVerticalSlider =3f/8f;
+            //     convexLens.transform.localPosition = lensNewPosition;
+            //     dropper.transform.localPosition = dropperNewPosition;
+
+            // }
+            // if(step==4){
+            //     convexMirrorWater.SwitchLiquid(1f);
+            //     finalVerticalSlider = 3f/8f;
+            //     convexLens.transform.localPosition = lensNewPosition;
+            //     dropper.transform.localPosition = dropperNewPosition;
+            //     dropper.GetComponent<Dropper>().drops();
+            // }
+            // if(step==5){
+            //     convexMirrorWater.SwitchLiquid(1.3f);
+            //     finalVerticalSlider = 3f/8f;
+            //     convexLens.transform.localPosition = lensOriginalPosition;
+            //     dropper.transform.localPosition = dropperOriginalPosition;
+            // }
+            // if(step==6){
+            //     convexMirrorWater.SwitchLiquid(1.3f);
+            //     finalVerticalSlider = 3.6f/8f;
+            //     convexLens.transform.localPosition = lensOriginalPosition;
+            //     dropper.transform.localPosition = dropperOriginalPosition;
+            // }
            
+            start.SetActive(false);
+            previous.SetActive(false);
+            next.SetActive(false);
+            audioSource.clip = tutorialAudio[step];
+            audioSource.Play();
+            Invoke("OnAudioFinish",audioSource.clip.length);
             isStepChanged = false;
         }
         float imageDiff =verticalSlider.value-finalVerticalSlider;
@@ -115,7 +136,7 @@ public class RFWaterTutorial : MonoBehaviour
         
     }
     public void nextStep(){
-        if(step<6){
+        if(step<2){
             step++;
             isStepChanged = true;
         }
@@ -126,6 +147,12 @@ public class RFWaterTutorial : MonoBehaviour
             step--;
             isStepChanged = true;
         }
+    }
+    void OnAudioFinish(){
+        audioSource.Stop();
+        start.SetActive(true);
+        previous.SetActive(true);
+        next.SetActive(true);
     }
 }
 

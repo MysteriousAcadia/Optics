@@ -2503,6 +2503,11 @@ MonoBehaviour:
   dropper: {fileID: 7761283048754309691}
   verticalSlider: {fileID: 8229813701600521630}
   isTutorialStarted: 0
+  audioSource: {fileID: 5278004709937035333}
+  tutorialAudio:
+  - {fileID: 8300000, guid: 4ab016afb08e94923b42e9424344802a, type: 3}
+  - {fileID: 8300000, guid: cb87f24749752477fac257fcbbc090ac, type: 3}
+  - {fileID: 8300000, guid: 8fba66e63a5464d0392faad34529b327, type: 3}
 --- !u!82 &5278004709937035333
 AudioSource:
   m_ObjectHideFlags: 0
