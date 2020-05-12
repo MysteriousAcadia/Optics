@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ConcaveMirrorTutorial
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: ef51374f5b72d483caed0b41a66c6740,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: start
+    value: 
+    objectReference: {fileID: 1951464530915338615, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: next
+    value: 
+    objectReference: {fileID: 265589559771882997, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: previous
+    value: 
+    objectReference: {fileID: 6026052027074200022, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: startText
+    value: 
+    objectReference: {fileID: 1337304708593991954, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: step
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: concaveMirror
+    value: 
+    objectReference: {fileID: 5676805303102924700, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: objectNeedleSlider
+    value: 
+    objectReference: {fileID: 4269613076373589623, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: imageNeedleSlider
+    value: 
+    objectReference: {fileID: 4269613076245453394, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: isTutorialStarted
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: audioSource
+    value: 
+    objectReference: {fileID: 2065545204889814118, guid: 8a1fc4b2358b243759d6497629166659,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: tutorialAudio.Array.size
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: tutorialAudio.Array.data[0]
+    value: 
+    objectReference: {fileID: 8300000, guid: 32a5900cdefa746d495816d534a7b06a, type: 3}
+  - target: {fileID: 0}
+    propertyPath: tutorialAudio.Array.data[1]
+    value: 
+    objectReference: {fileID: 8300000, guid: 5712df2e95bb4401b8a67c1d3b7a4453, type: 3}
+  - target: {fileID: 0}
+    propertyPath: tutorialAudio.Array.data[2]
+    value: 
+    objectReference: {fileID: 8300000, guid: 9d9abdc4d897c476d9c2ef8f83e628c2, type: 3}
+  - target: {fileID: 0}
+    propertyPath: tutorialAudio.Array.data[3]
+    value: 
+    objectReference: {fileID: 8300000, guid: 5baabb9baee10442aa5ad5b36c95c396, type: 3}

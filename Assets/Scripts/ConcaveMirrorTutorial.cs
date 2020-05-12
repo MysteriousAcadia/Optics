@@ -15,6 +15,8 @@ public class ConcaveMirrorTutorial : MonoBehaviour
     public Slider objectNeedleSlider;
     public Slider imageNeedleSlider; 
     public bool isTutorialStarted = false;
+    public AudioSource audioSource;
+    public List<AudioClip> tutorialAudio;
        // Start is called before the first frame update
     public void StartTutorial()
     {
@@ -34,6 +36,7 @@ public class ConcaveMirrorTutorial : MonoBehaviour
         
     }
     void Start(){
+        audioSource = GetComponent<AudioSource>();
         isTutorialStarted = false;
         startText.text = "Start Tutorial";
         previous.SetActive(false);
@@ -49,17 +52,27 @@ public class ConcaveMirrorTutorial : MonoBehaviour
         }
         if(isStepChanged){
             if(step==0){
-                finalObjectNeedlePos = 0.4f;
+                finalObjectNeedlePos = 1f;
                 finalImageNeedlePos = 0.2f;
             }
             if(step==1){
-                finalObjectNeedlePos = 1f;
-                finalImageNeedlePos = 0.2f;
+                finalObjectNeedlePos =1f;
+                finalImageNeedlePos =0.66f;
             }
             if(step==2){
                 finalObjectNeedlePos =1f;
                 finalImageNeedlePos =0.66f;
             }
+            if(step==3){
+                finalObjectNeedlePos =1f;
+                finalImageNeedlePos =0.66f;
+            }
+            start.SetActive(false);
+            previous.SetActive(false);
+            next.SetActive(false);
+            audioSource.clip = tutorialAudio[step];
+            audioSource.Play();
+            Invoke("OnAudioFinish",audioSource.clip.length);
             isStepChanged = false;
         }
         float needleDiff =objectNeedleSlider.value-finalObjectNeedlePos;
@@ -84,7 +97,7 @@ public class ConcaveMirrorTutorial : MonoBehaviour
         
     }
     public void nextStep(){
-        if(step<2){
+        if(step<3){
             step++;
             isStepChanged = true;
         }
@@ -96,6 +109,14 @@ public class ConcaveMirrorTutorial : MonoBehaviour
             isStepChanged = true;
         }
     }
+
+    void OnAudioFinish(){
+        audioSource.Stop();
+        start.SetActive(true);
+        previous.SetActive(true);
+        next.SetActive(true);
+    }
+
 }
 
 

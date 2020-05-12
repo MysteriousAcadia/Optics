@@ -16,6 +16,9 @@ public class ConvexConcaveLensTutorial : MonoBehaviour
     public Slider objectNeedleSlider;
     public Slider imageNeedleSlider; 
     public bool isTutorialStarted = false;
+     public AudioSource audioSource;
+    public List<AudioClip> tutorialAudio;
+
        // Start is called before the first frame update
     public void StartTutorial()
     {
@@ -50,15 +53,25 @@ public class ConvexConcaveLensTutorial : MonoBehaviour
         }
         if(isStepChanged){
             if(step==0){
+                // finalObjectNeedlePos = 1f;
+                // finalImageNeedlePos = 1f;
+                // opticalBenchPlace.removeConcaveLens();
+                 convexLensNew.imageVisible = true;
                 finalObjectNeedlePos = 1f;
                 finalImageNeedlePos = 1f;
                 opticalBenchPlace.removeConcaveLens();
+            
             }
             if(step==1){
                 convexLensNew.imageVisible = true;
                 finalObjectNeedlePos = 1f;
-                finalImageNeedlePos = 1f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+                Debug.LogError(finalImageNeedlePos);
                 opticalBenchPlace.removeConcaveLens();
+                // convexLensNew.imageVisible = true;
+                // finalObjectNeedlePos = 1f;
+                // finalImageNeedlePos = 1f;
+                // opticalBenchPlace.removeConcaveLens();
             }
             if(step==2){
                 convexLensNew.imageVisible = true;
@@ -81,6 +94,24 @@ public class ConvexConcaveLensTutorial : MonoBehaviour
                 finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
 
             }
+            if(step==5){
+                 convexLensNew.imageVisible = true;
+                opticalBenchPlace.addConcaveLens();
+                finalObjectNeedlePos = 1f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+            }
+            if(step==6){
+                 convexLensNew.imageVisible = true;
+                opticalBenchPlace.addConcaveLens();
+                finalObjectNeedlePos = 1f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+            }
+             start.SetActive(false);
+            previous.SetActive(false);
+            next.SetActive(false);
+            audioSource.clip = tutorialAudio[step];
+            audioSource.Play();
+            Invoke("OnAudioFinish",audioSource.clip.length);
             isStepChanged = false;
         }
         float needleDiff =objectNeedleSlider.value-finalObjectNeedlePos;
@@ -105,7 +136,7 @@ public class ConvexConcaveLensTutorial : MonoBehaviour
         
     }
     public void nextStep(){
-        if(step<4){
+        if(step<6){
             step++;
             isStepChanged = true;
         }
@@ -116,5 +147,11 @@ public class ConvexConcaveLensTutorial : MonoBehaviour
             step--;
             isStepChanged = true;
         }
+    }
+    void OnAudioFinish(){
+        audioSource.Stop();
+        start.SetActive(true);
+        previous.SetActive(true);
+        next.SetActive(true);
     }
 }

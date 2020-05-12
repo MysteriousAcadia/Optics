@@ -15,6 +15,8 @@ public class Exp1Tutorial : MonoBehaviour
     public Slider objectNeedleSlider;
     public Slider imageNeedleSlider; 
     public bool isTutorialStarted = false;
+    public AudioSource audioSource;
+    public List<AudioClip> tutorialAudio;
        // Start is called before the first frame update
     public void StartTutorial()
     {
@@ -34,6 +36,10 @@ public class Exp1Tutorial : MonoBehaviour
         
     }
     void Start(){
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource==null){
+            Debug.LogError("No Audio Source Found");
+        }
         isTutorialStarted = false;
         startText.text = "Start Tutorial";
         previous.SetActive(false);
@@ -48,17 +54,36 @@ public class Exp1Tutorial : MonoBehaviour
             return;
         }
         if(isStepChanged){
+            start.SetActive(false);
+            previous.SetActive(false);
+            next.SetActive(false);
             if(step==0){
-                finalObjectNeedlePos = 1f;
+                finalObjectNeedlePos = convexLensNew.focalLength*2f/5f;
                 finalImageNeedlePos = 1f;
+                audioSource.clip = tutorialAudio[step];
+                audioSource.Play();
+                Invoke("OnAudioFinish",audioSource.clip.length);
             }
             if(step==1){
                 finalObjectNeedlePos = convexLensNew.focalLength*2f/5f;
-                finalImageNeedlePos = 1f;
+                finalImageNeedlePos = (convexLensNew.focalLength*2f/5f);
+                audioSource.clip = tutorialAudio[step];
+                audioSource.Play();
+                Invoke("OnAudioFinish",audioSource.clip.length);
             }
             if(step==2){
                 finalObjectNeedlePos = convexLensNew.focalLength*2f/5f;
                 finalImageNeedlePos = (convexLensNew.focalLength*2f/5f);
+                audioSource.clip = tutorialAudio[step];
+                audioSource.Play();
+                Invoke("OnAudioFinish",audioSource.clip.length);
+            }
+            if(step==3){
+                finalObjectNeedlePos = convexLensNew.focalLength*2f/5f;
+                finalImageNeedlePos = (convexLensNew.focalLength*2f/5f);
+                audioSource.clip = tutorialAudio[step];
+                audioSource.Play();
+                Invoke("OnAudioFinish",audioSource.clip.length);
             }
             isStepChanged = false;
         }
@@ -84,7 +109,7 @@ public class Exp1Tutorial : MonoBehaviour
         
     }
     public void nextStep(){
-        if(step<2){
+        if(step<3){
             step++;
             isStepChanged = true;
         }
@@ -95,5 +120,11 @@ public class Exp1Tutorial : MonoBehaviour
             step--;
             isStepChanged = true;
         }
+    }
+    void OnAudioFinish(){
+        audioSource.Stop();
+        start.SetActive(true);
+        previous.SetActive(true);
+        next.SetActive(true);
     }
 }

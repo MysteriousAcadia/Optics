@@ -16,6 +16,8 @@ public class MirrorLensConvexTutorial : MonoBehaviour
     public Slider objectNeedleSlider;
     public Slider imageNeedleSlider; 
     public bool isTutorialStarted = false;
+    public AudioSource audioSource;
+    public List<AudioClip> tutorialAudio;
        // Start is called before the first frame update
     public void StartTutorial()
     {
@@ -50,15 +52,24 @@ public class MirrorLensConvexTutorial : MonoBehaviour
         }
         if(isStepChanged){
             if(step==0){
-                finalObjectNeedlePos = 1f;
-                finalImageNeedlePos = 1f;
-                opticalBenchPlace.removeConvexMirror();
-            }
-            if(step==1){
+                // finalObjectNeedlePos = 1f;
+                // finalImageNeedlePos = 1f;
+                // opticalBenchPlace.removeConvexMirror();
                 convexLensNew.imageVisible = true;
                 finalObjectNeedlePos = 1f;
                 finalImageNeedlePos = 1f;
                 opticalBenchPlace.addConvexMirror();
+            }
+            if(step==1){
+                // convexLensNew.imageVisible = true;
+                // finalObjectNeedlePos = 1f;
+                // finalImageNeedlePos = 1f;
+                // opticalBenchPlace.addConvexMirror();
+                opticalBenchPlace.addConvexMirror();
+                convexLensNew.imageVisible = true;
+                finalObjectNeedlePos = 3.8f/5f;
+                finalImageNeedlePos = 1f;
+                Debug.LogError(finalImageNeedlePos);
             }
             if(step==2){
                 opticalBenchPlace.addConvexMirror();
@@ -69,19 +80,52 @@ public class MirrorLensConvexTutorial : MonoBehaviour
                 
             }
             if(step==3){
-                opticalBenchPlace.removeConvexMirror();
+                 opticalBenchPlace.addConvexMirror();
+                convexLensNew.imageVisible = true;
+                finalObjectNeedlePos = 3.8f/5f;
+                finalImageNeedlePos = 1f;
+                Debug.LogError(finalImageNeedlePos);
+                // opticalBenchPlace.removeConvexMirror();
+                // convexLensNew.imageVisible = true;
+                // finalObjectNeedlePos = 3.8f/5f;
+                // finalImageNeedlePos = 1f;
+
+            }
+            if(step==4){
+                 opticalBenchPlace.removeConvexMirror();
                 convexLensNew.imageVisible = true;
                 finalObjectNeedlePos = 3.8f/5f;
                 finalImageNeedlePos = 1f;
 
+               
+
             }
-            if(step==4){
-                opticalBenchPlace.removeConvexMirror();
+            if(step==5){
+                 opticalBenchPlace.removeConvexMirror();
                 convexLensNew.imageVisible = true;
                 finalObjectNeedlePos = 3.8f/5f;
                 finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
 
             }
+            if(step==6){
+                 opticalBenchPlace.removeConvexMirror();
+                convexLensNew.imageVisible = true;
+                finalObjectNeedlePos = 3.8f/5f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+
+            }
+            if(step==7){
+                 opticalBenchPlace.removeConvexMirror();
+                convexLensNew.imageVisible = true;
+                finalObjectNeedlePos = 3.8f/5f;
+                finalImageNeedlePos = -convexLensNew.gameO.transform.localPosition.x/5f;
+            }
+            start.SetActive(false);
+            previous.SetActive(false);
+            next.SetActive(false);
+            audioSource.clip = tutorialAudio[step];
+            audioSource.Play();
+            Invoke("OnAudioFinish",audioSource.clip.length);
             isStepChanged = false;
         }
         float needleDiff =objectNeedleSlider.value-finalObjectNeedlePos;
@@ -106,7 +150,7 @@ public class MirrorLensConvexTutorial : MonoBehaviour
         
     }
     public void nextStep(){
-        if(step<4){
+        if(step<7){
             step++;
             isStepChanged = true;
         }
@@ -117,5 +161,11 @@ public class MirrorLensConvexTutorial : MonoBehaviour
             step--;
             isStepChanged = true;
         }
+    }
+      void OnAudioFinish(){
+        audioSource.Stop();
+        start.SetActive(true);
+        previous.SetActive(true);
+        next.SetActive(true);
     }
 }
