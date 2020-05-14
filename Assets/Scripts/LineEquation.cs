@@ -5,24 +5,28 @@ using UnityEngine;
 public class LineEquation{
 
     //ax+by+c=0
-    public Vector3 p1,p2;
+    public Vector3 Point1,Point2;
     Vector2 A,B;
    
     public float a;
     public float b;
     public float c;
+        public float Slope => -a / b;
+
+
+public LineEquation(){}
     
     //Vector3 not required but all the points used are in 3D.
     public void setConstants(Vector3 pp1, Vector3 pp2){
-        p1 = pp1;
-        p2 = pp2;
+        Point1 = pp1;
+        Point2 = pp2;
         A.x=pp1.x;
         B.x=pp2.x;
         A.y=pp1.y;
         B.y=pp2.y;
-        a = p1.y-p2.y;
-        b = p2.x-p1.x;
-        c = p1.x*p2.y - p2.x-p1.y;
+        a = Point1.y-Point2.y;
+        b = Point2.x-Point1.x;
+        c = Point1.x*Point2.y - Point2.x-Point1.y;
     }
 
     public Vector3 getConstants(){
@@ -30,16 +34,16 @@ public class LineEquation{
     }
     //Returns distance between a point and line.
     public float perpDistance(Vector3 x) {
-        Vector3 s = p1-p2;
-        Vector3 m1 = x-p2;
+        Vector3 s = Point1-Point2;
+        Vector3 m1 = x-Point2;
         Vector3 cr = Vector3.Cross(m1,s);
         float ans = cr.magnitude/s.magnitude;
         return ans;
     }
     public List<Vector3> getPoints(){
         List<Vector3> points = new List<Vector3>();
-        points.Add(p1);
-        points.Add(p2);
+        points.Add(Point1);
+        points.Add(Point2);
         return points;
     }
 
@@ -62,14 +66,14 @@ public class LineEquation{
         // ans.y = (+l1.c+(l1.a*ans.x))/-l1.b;
         // return ans;
          // Line AB represented as a1x + b1y = c1  
-        double a1 = l1.p2.y - l1.p1.y; 
-        double b1 = l1.p1.x - l1.p2.x; 
-        double c1 = a1 * (l1.p1.x) + b1 * (l1.p1.y); 
+        double a1 = l1.Point2.y - l1.Point1.y; 
+        double b1 = l1.Point1.x - l1.Point2.x; 
+        double c1 = a1 * (l1.Point1.x) + b1 * (l1.Point1.y); 
   
         // Line CD represented as a2x + b2y = c2  
-        double a2 = p2.y - p1.y; 
-        double b2 = p1.x - p2.x; 
-        double c2 = a2 * (p1.x) + b2 * (p1.y); 
+        double a2 = Point2.y - Point1.y; 
+        double b2 = Point1.x - Point2.x; 
+        double c2 = a2 * (Point1.x) + b2 * (Point1.y); 
   
         double determinant = a1 * b2 - a2 * b1; 
   
@@ -83,7 +87,7 @@ public class LineEquation{
         { 
             double x = (b2 * c1 - b1 * c2) / determinant; 
             double y = (a1 * c2 - a2 * c1) / determinant; 
-            return new Vector3((float)x,(float) y,p1.z); 
+            return new Vector3((float)x,(float) y,Point1.z); 
         } 
     }
     public float getSlope(){
@@ -111,5 +115,69 @@ public class LineEquation{
         {
             return A + AB * distance;
         }
+    }
+
+    public LineEquation(Vector3 p1, Vector3 p2)
+    {
+        A=new Vector2(p1.x,p1.y);
+        B=new Vector2(p2.x,p2.y);
+        Point1 = p1;
+        Point2 = p2;
+
+        a = Point2.y - Point1.y;
+        b = Point1.x - Point2.x;
+        c = Point1.x * (Point1.y - Point2.y) + Point1.y * (Point2.x - Point1.x);
+
+    }
+
+    public LineEquation(Vector3 P1, double angle)
+    {
+        Point1 = P1;
+        angle = angle * Math.PI / 180;
+        Point2 = new Vector3(P1.x + Mathf.Cos((float)angle), P1.y + Mathf.Sin((float)angle), Point1.z);
+
+        a = Point2.y - Point1.y;
+        b = Point1.x - Point2.x;
+        c = Point1.x * (Point1.y - Point2.y) + Point1.y * (Point2.x - Point1.x);
+    }
+
+    public double AngleOfIntersection(LineEquation l1)
+    {
+        var m1 = -l1.a / l1.b;
+        var m2 = -a / b;
+
+        var newAngle = Math.Atan2(Math.Abs((m2 - m1) / (1 + m1 * m2)), 1);
+
+        return newAngle * 180f / Math.PI;
+    }
+
+    public Vector3 Intersect(LineEquation l1)
+    {
+        
+        double a1 = l1.Point2.y - l1.Point1.y;
+        double b1 = l1.Point1.x - l1.Point2.x;
+        double c1 = a1 * (l1.Point1.x) + b1 * (l1.Point1.y);
+
+        double a2 = Point2.y - Point1.y;
+        double b2 = Point1.x - Point2.x;
+        double c2 = a2 * (Point1.x) + b2 * (Point1.y);
+
+        double determinant = a1 * b2 - a2 * b1;
+
+        if (determinant == 0)
+        {
+            return new Vector3(0, 0, 0);
+        }
+        else
+        {
+            double x = (b2 * c1 - b1 * c2) / determinant;
+            double y = (a1 * c2 - a2 * c1) / determinant;
+            return new Vector3((float)x, (float)y, Point1.z);
+        }
+    }
+
+    public override string ToString()
+    {
+        return string.Format("{0}*x+{1}*y+{2}=0", a, b, c);
     }
 }

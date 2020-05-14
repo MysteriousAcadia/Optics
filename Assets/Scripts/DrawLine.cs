@@ -22,17 +22,16 @@ public class DrawLine : MonoBehaviour
     }
     
     public void drawLine(LineEquation l){
-        
         currentLine = Instantiate(lineObject);
         pencilLine = currentLine.GetComponent<PencilLine>();
         currentLine.transform.SetParent(gameObject.transform);
         currentLine.transform.localPosition = new Vector3(100,110,110);
         currentLine.transform.position = gameObject.transform.position;
         line = currentLine.GetComponent<LineRenderer>();
-        l.p1.z=0.1f;
-        l.p2.z=0.1f;
-        line.SetPosition(0,l.p1);
-        line.SetPosition(1,l.p2);
+        l.Point1.z=0.1f;
+        l.Point2.z=0.1f;
+        line.SetPosition(0,l.Point1);
+        line.SetPosition(1,l.Point2);
     }
 
     void OnMouseDown()
@@ -40,12 +39,12 @@ public class DrawLine : MonoBehaviour
         mZCoordinate = gameObject.transform.position.z;
         prismLineEquations = new List<LineEquation>();
         List<Vector3> prismVertices = prism.getVertices();
-        LineEquation l1 = new LineEquation();
-        l1.setConstants(prismVertices[0],prismVertices[1]);
-        LineEquation l2 = new LineEquation();
-        l2.setConstants(prismVertices[1],prismVertices[2]);
-        LineEquation l3 = new LineEquation();
-        l3.setConstants(prismVertices[0],prismVertices[2]);
+        LineEquation l1 = new LineEquation(prismVertices[0],prismVertices[1]);
+        // l1.setConstants(prismVertices[0],prismVertices[1]);
+        LineEquation l2 = new LineEquation(prismVertices[1],prismVertices[2]);
+        // l2.setConstants(prismVertices[1],prismVertices[2]);
+        LineEquation l3 = new LineEquation(prismVertices[0],prismVertices[2]);
+        // l3.setConstants(prismVertices[0],prismVertices[2]);
         prismLineEquations.Add(l1);
         prismLineEquations.Add(l2);
         prismLineEquations.Add(l3);
@@ -67,6 +66,7 @@ public class DrawLine : MonoBehaviour
                         Debug.LogError("COULD BE SNAPPED");
                     }
                 }
+                pencilLine.vertices.Add(new Vector3(hit.point.x,hit.point.y,0.1f));
 
                 line.SetPosition(0,new Vector3(hit.point.x,hit.point.y,0.1f));
                 line.SetPosition(1,hit.point);
@@ -108,13 +108,19 @@ public class DrawLine : MonoBehaviour
                 if(hit.transform.gameObject.name==gameObject.transform.gameObject.name){
                 bool hasSnapped = false;
                 foreach(LineEquation l in prismLineEquations){
-                    if(l.perpDistance(new Vector3(hit.point.x,hit.point.y,hit.point.z))<1f){
+                    if(l.perpDistance(new Vector3(hit.point.x,hit.point.y,hit.point.z))<0.5f){
 
                         Vector2 point = l.GetClosestPointOnLineSegment(new Vector2(hit.point.x,hit.point.y));
-                        LineEquation l1 = new LineEquation();
-                        l1.setConstants(pencilLine.vertices[0],point);
+                        LineEquation l1 = new LineEquation(pencilLine.vertices[0],point);
+                        // l1.setConstants(pencilLine.vertices[0],point);
+                        Debug.LogError("Inputs Given: line1:"+l.ToString()+", line2:"+l1.ToString());
+                        Debug.LogError("Prism Line Equation 1:"+prismLineEquations[0].ToString());
+                        Debug.LogError("Prism Line Equation 2:"+prismLineEquations[1].ToString());
+                        Debug.LogError("Prism Line Equation 3:"+prismLineEquations[2].ToString());
                         line.SetPosition(1,new Vector3(point.x,point.y,hit.point.z+0.1f));
-                        prism.calculateImageLine(l,l1,prismLineEquations);
+                        prism.Calculation(l,l1,prismLineEquations);
+                        // prism.Calculation(l1,l,prismLineEquations);
+
                         hasSnapped = true;
                     }
                 }
