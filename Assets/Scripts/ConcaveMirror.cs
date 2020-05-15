@@ -8,7 +8,7 @@ public class ConcaveMirror : MonoBehaviour
     public
     GameObject objectNeedle;
     public GameObject objectScreen;
-    
+
 
     [SerializeField] public float focalLength = 2;
 
@@ -42,9 +42,6 @@ public class ConcaveMirror : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        objectNeedle = FindObjectOfType<ObjectNeedle>().gameObject;
-        objectScreen = FindObjectOfType<ObjectScreen>().gameObject;
-
         textNeedle.text = "4";
         textScreen.text = "4";
 
@@ -52,9 +49,9 @@ public class ConcaveMirror : MonoBehaviour
 
         gameOVir = Instantiate(virImage, new Vector3(-2000f, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z), Quaternion.identity, opticalBench.transform);
 
-        
+
         gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
-        
+
         gameOVir.transform.Rotate(90, 0, 0);
         gameO.transform.Rotate(180, 0, 0);
 
@@ -63,15 +60,20 @@ public class ConcaveMirror : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
+        if (!imageVisible && !gameObject.activeSelf && !objectNeedle.activeSelf)
+        {
+            gameO.SetActive(false);
+            gameOVir.SetActive(false);
+        }
 
         if (!isPositionChanged)
         {
             return;
         }
 
-        uValue = 0- objectPos;
-        vValue = 0 - screenPos;
+        uValue = 0f - objectPos;
+        vValue = 0f - screenPos;
 
         textNeedle.text = uValue.ToString();
         textScreen.text = vValue.ToString();
@@ -90,17 +92,17 @@ public class ConcaveMirror : MonoBehaviour
             gameO.SetActive(true);
 
             float testVal;
-            testVal =  1 / (-(1 / uValue) + (1 / focalLength));
+            testVal = 1 / (-(1 / uValue) + (1 / focalLength));
             testVal = Mathf.Round(testVal * 10) / 10;
-            
+
 
             magnification = -testVal / uValue;
 
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-testVal + gameObject.transform.localPosition.x, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
 
-           
+
             if (magnification < 0)
             {
                 gameO.transform.localEulerAngles = new Vector3(180, 0, 0);
@@ -120,13 +122,13 @@ public class ConcaveMirror : MonoBehaviour
             gameO.SetActive(true);
 
             magnification = -2 * focalLength / uValue;
-            
+
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-2 * focalLength, objectNeedle.transform.localPosition.y + 1f , objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3((-2 * focalLength) + gameObject.transform.localPosition.x, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
 
-           
-            
+
+
             if (magnification < 0)
             {
                 gameO.transform.localEulerAngles = new Vector3(180, 0, 0);
@@ -150,10 +152,10 @@ public class ConcaveMirror : MonoBehaviour
             testVal = Mathf.Round(testVal * 10) / 10;
 
             magnification = -testVal / uValue;
-            
+
             gameO.transform.localScale = new Vector3(gameO.transform.localScale.x, -1 * magnification, gameO.transform.localScale.z);
 
-            gameO.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
+            gameO.transform.localPosition = new Vector3(-testVal + gameObject.transform.localPosition.x, objectNeedle.transform.localPosition.y + 1f, objectNeedle.transform.localPosition.z);
 
 
             if (magnification < 0)
@@ -194,14 +196,14 @@ public class ConcaveMirror : MonoBehaviour
             // gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, gameOVir.transform.localScale.y, gameOVir.transform.localScale.z);
             gameOVir.transform.localScale = new Vector3(gameOVir.transform.localScale.x, magnification, gameOVir.transform.localScale.z);
 
-            gameOVir.transform.localPosition = new Vector3(-testVal, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
+            gameOVir.transform.localPosition = new Vector3(-testVal + gameObject.transform.localPosition.x, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
             // gameOVir.transform.localPosition = new Vector3(-testVal, magnification, gameOVir.transform.localPosition.z);
 
 
-            
+
             // if (magnification < 0)
             // {
-                gameOVir.transform.localEulerAngles = new Vector3(0, 0, 0);
+            gameOVir.transform.localEulerAngles = new Vector3(0, 0, 0);
             // }
             // else
             // {
@@ -210,15 +212,17 @@ public class ConcaveMirror : MonoBehaviour
 
             gameO.SetActive(false);
         }
-        if(!imageVisible && !gameObject.activeSelf){
-        gameO.SetActive(false);
-        gameOVir.SetActive(false);
-    }
+        if (!imageVisible && !gameObject.activeSelf)
+        {
+            gameO.SetActive(false);
+            gameOVir.SetActive(false);
+        }
 
-        
+
         isPositionChanged = false;
     }
 
+    
 
     public void ChangeObjectPosition()
     {
@@ -229,28 +233,21 @@ public class ConcaveMirror : MonoBehaviour
 
         newPos = slider.value;
 
-        newPos = newPos * 5;
+        newPos = newPos * 10;
 
-        if(newPos < 0.2)
+        newPos = 5 - newPos;
+        if ((gameObject.transform.localPosition.x - newPos) < 0.5f)
         {
-            newPos = 0.2f;
+            newPos = gameObject.transform.localPosition.x - 0.5f;
+            slider.value = (5 - newPos) / 10f;
         }
 
-        if (newPos > 5)
-        {
-            newPos = 5f;
-        }
-        Debug.LogError(newPos.ToString()+" "+screenPos.ToString());
-        // if(newPos+screenPos>0.1f){
-        //     Debug.LogError("Object");
-        //     // slider.value = (screenPos+0.1f)/5;
-        //     newPos = -screenPos-0.1f;
-        // }
+        Debug.LogError(newPos.ToString() + " " + screenPos.ToString());
 
-        newPos = ((-Mathf.Round(newPos * 10)) / 10);
+        newPos = ((Mathf.Round(newPos * 10)) / 10);
 
         objectNeedle.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
-        objectPos = -gameObject.transform.localPosition.x+newPos;
+        objectPos = -gameObject.transform.localPosition.x + newPos;
     }
 
     public void ChangeScreenPosition()
@@ -260,36 +257,25 @@ public class ConcaveMirror : MonoBehaviour
 
         float newPos = 0f;
 
-        newPos = 1 - sliderScreen.value;
+        newPos = sliderScreen.value;
 
-        newPos = newPos * 5;
+        newPos = newPos * 10;
 
-        newPos = newPos - 5;
-
-        // if(newPos<)
-
-        if (newPos > -0.2)
-        {
-            newPos = -0.2f;
-        }
-
-        if (newPos < -5)
-        {
-            newPos = -5f;
-        }
-        // if(newPos-objectPos>-0.1f){
-        //     Debug.LogError("Screen");
-        //     // slider.value = 1- (-objectPos+0.3f)/5f;
-        //     newPos = objectPos-0.3f;
-        // }
+        newPos = 5 - newPos;
 
         newPos = (Mathf.Round(newPos * 10)) / 10;
+        if ((gameObject.transform.localPosition.x - newPos) < 0.5f)
+        {
+            newPos = gameObject.transform.localPosition.x - 0.5f;
+            slider.value = (5 - newPos) / 10f;
+        }
 
         objectScreen.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
-        screenPos = -gameObject.transform.localPosition.x+newPos;
+        screenPos = -gameObject.transform.localPosition.x + newPos;
     }
 
-    public void switchView(){
+    public void switchView()
+    {
         imageVisible = !imageVisible;
         isPositionChanged = true;
     }
