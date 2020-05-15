@@ -1426,6 +1426,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToggleButton
       objectReference: {fileID: 0}
+    - target: {fileID: 1755463314885128772, guid: 5ec0d13ce5dd4426f8af35f01642a7bf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755463314885128772, guid: 5ec0d13ce5dd4426f8af35f01642a7bf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755463314885128772, guid: 5ec0d13ce5dd4426f8af35f01642a7bf,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1755463314885128773, guid: 5ec0d13ce5dd4426f8af35f01642a7bf,
         type: 3}
       propertyPath: m_LocalPosition.x

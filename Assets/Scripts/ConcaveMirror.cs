@@ -31,8 +31,8 @@ public class ConcaveMirror : MonoBehaviour
     float vValue = 3;
     float magnification;
 
-    bool toDisplayImage = false;
     bool isPositionChanged = false;
+    public bool imageVisible = false;
 
     ScalePoints[] scalePoints;
 
@@ -210,6 +210,10 @@ public class ConcaveMirror : MonoBehaviour
 
             gameO.SetActive(false);
         }
+        if(!imageVisible && !gameObject.activeSelf){
+        gameO.SetActive(false);
+        gameOVir.SetActive(false);
+    }
 
         
         isPositionChanged = false;
@@ -283,5 +287,10 @@ public class ConcaveMirror : MonoBehaviour
 
         objectScreen.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         screenPos = -gameObject.transform.localPosition.x+newPos;
+    }
+
+    public void switchView(){
+        imageVisible = !imageVisible;
+        isPositionChanged = true;
     }
 }

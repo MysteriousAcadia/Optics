@@ -11,7 +11,9 @@ public class OpticalBenchPlace : MonoBehaviour
     public GameObject imageNeedle;
     public ConvexLensNew convexLens;
     public bool isPlaced = false;
-    public Animator lowerDeck, upperDeck;
+    public GameObject upperDeckGameO,lowerDeckGameO;
+    public GameObject upperDeckMountGameO;
+    Animator upperDeck, lowerDeck, upperDeckMount;
     public Text t;
 
     public UIManager uIManager;
@@ -21,51 +23,54 @@ public class OpticalBenchPlace : MonoBehaviour
         if(uIManager==null){
             Debug.LogError("OpticalBench: UI Manager is missing!");
         }
+        if(upperDeckGameO==null){
+            Debug.LogError("OpticalBench: UpperDeckGameO is missing!");
+        }
+        upperDeck = upperDeckGameO.GetComponent<Animator>();
+        lowerDeck = lowerDeckGameO.GetComponent<Animator>();
         Input.simulateMouseWithTouches = true;
     }
     
     void OnMouseDown()
     {
+        if(uIManager.optionSelected<0){
        
-        if(uIManager.currentActiveCanvas==null){
+        if(uIManager.currentLowerDeck==null){
+            lowerDeckGameO.SetActive(true);
             lowerDeck.SetBool("EaseOut",true);
+        }
+        else{
+            uIManager.currentLowerDeck.SetActive(false);
+            lowerDeckGameO.SetActive(true);
+            lowerDeck.SetBool("EaseOut",true);
+        }
+        if(uIManager.currentUpperDeck==null){
+            upperDeckGameO.SetActive(true);
             upperDeck.SetBool("EaseOut",true);
         }
+        else{
+            uIManager.currentUpperDeck.SetActive(false);
+            upperDeckGameO.SetActive(true);
+            upperDeck.SetBool("EaseOut",true);
+        }
+        uIManager.currentLowerDeck = lowerDeckGameO;
+        uIManager.currentUpperDeck = upperDeckGameO;
+        }
+    }
+
+    public void Mount(){
+        uIManager.optionSelected = 1;
+        uIManager.currentLowerDeck.SetActive(false);
+        uIManager.currentUpperDeck.SetActive(false);
+        uIManager.previousLowerDeck = uIManager.currentLowerDeck;
+        uIManager.currentUpperDeck = upperDeckMountGameO;
+        upperDeckMountGameO.SetActive(true);
     }
 
 bool islol = true;
     // Update is called once per frame
     void Update()
     {
-        // if (Input.touchCount > 0)
-        // {
-        //     Debug.Log("Touched " );
-        //     objectNeedle.SetActive(islol);
-        //              islol = !islol;
-
-
-        //     Vector3 touchPosWorld = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
- 
-        //      Vector2 touchPosWorld2D = new Vector2(touchPosWorld.x, touchPosWorld.y);
- 
-        //      //We now raycast with this information. If we have hit something we can process it.
-        //      RaycastHit2D hitInformation = Physics2D.Raycast(touchPosWorld2D, Camera.main.transform.forward);
- 
-        //      if (hitInformation.collider != null) {
-
-        //          //We should have hit something with a 2D Physics collider!
-        //          GameObject touchedObject = hitInformation.transform.gameObject;
-        //          if(touchedObject.transform.name==gameObject.transform.name){
-        //              imageNeedle.SetActive(islol);
-        //          }
-        //          Debug.Log("Touched " + touchedObject.transform.name);
-        //          t.text = touchedObject.transform.name;
-        //      }
-        //  }
-
-            // Move the cube if the screen has the finger moving.
-            
-        
         
     }
     public void PlaceImageNeedle(){
