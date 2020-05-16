@@ -15,7 +15,10 @@ public class ConcaveMirror : MonoBehaviour
     [SerializeField] Text textNeedle;
     [SerializeField] Text textScreen;
 
-    [SerializeField] Slider slider;
+    [SerializeField]Text mirrorText;
+
+    [SerializeField] Slider objectSlider;
+    [SerializeField] Slider concaveMirrorSlider;
     [SerializeField] Slider sliderScreen;
 
     [SerializeField] GameObject image;
@@ -61,7 +64,7 @@ public class ConcaveMirror : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!imageVisible && !gameObject.activeSelf && !objectNeedle.activeSelf)
+        if (!imageVisible || !gameObject.activeSelf || !objectNeedle.activeSelf)
         {
             gameO.SetActive(false);
             gameOVir.SetActive(false);
@@ -75,9 +78,7 @@ public class ConcaveMirror : MonoBehaviour
         uValue = 0f - objectPos;
         vValue = 0f - screenPos;
 
-        textNeedle.text = uValue.ToString();
-        textScreen.text = vValue.ToString();
-
+    
         //Now start applying conditions for the lens, from here the script is variable
 
         //Object at infinity
@@ -212,7 +213,7 @@ public class ConcaveMirror : MonoBehaviour
 
             gameO.SetActive(false);
         }
-        if (!imageVisible && !gameObject.activeSelf)
+        if (!imageVisible || !gameObject.activeSelf || !objectNeedle.activeSelf)
         {
             gameO.SetActive(false);
             gameOVir.SetActive(false);
@@ -222,7 +223,35 @@ public class ConcaveMirror : MonoBehaviour
         isPositionChanged = false;
     }
 
-    
+    public void ChangeMirrorPosition()
+    {
+        isPositionChanged = true;
+
+        float newPos = 0f;
+
+        newPos = concaveMirrorSlider.value;
+
+        newPos = newPos * 10;
+
+        newPos = 5 - newPos;
+        float closestNeedle = objectNeedle.transform.localPosition.x>objectScreen.transform.localPosition.x ?objectNeedle.transform.localPosition.x :objectScreen.transform.localPosition.x;
+        if ((newPos-closestNeedle) < 0.5f)
+        {
+            newPos = closestNeedle + 0.5f;
+            concaveMirrorSlider.value = (5 - newPos) / 10f;
+        }
+
+        Debug.LogError(closestNeedle.ToString() + " " + newPos.ToString());
+
+        newPos = ((Mathf.Round(newPos * 10)) / 10);
+
+        gameObject.transform.localPosition = new Vector3(newPos, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z);
+        // objectPos = -gameObject.transform.localPosition.x + newPos;   
+        mirrorText.text = ((5 - newPos) * 10f).ToString();
+
+    }
+
+
 
     public void ChangeObjectPosition()
     {
@@ -231,7 +260,7 @@ public class ConcaveMirror : MonoBehaviour
 
         float newPos = 0f;
 
-        newPos = slider.value;
+        newPos = objectSlider.value;
 
         newPos = newPos * 10;
 
@@ -239,7 +268,7 @@ public class ConcaveMirror : MonoBehaviour
         if ((gameObject.transform.localPosition.x - newPos) < 0.5f)
         {
             newPos = gameObject.transform.localPosition.x - 0.5f;
-            slider.value = (5 - newPos) / 10f;
+            objectSlider.value = (5 - newPos) / 10f;
         }
 
         Debug.LogError(newPos.ToString() + " " + screenPos.ToString());
@@ -248,6 +277,8 @@ public class ConcaveMirror : MonoBehaviour
 
         objectNeedle.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         objectPos = -gameObject.transform.localPosition.x + newPos;
+        textNeedle.text = ((5-newPos) * 10f).ToString() ;
+
     }
 
     public void ChangeScreenPosition()
@@ -267,11 +298,13 @@ public class ConcaveMirror : MonoBehaviour
         if ((gameObject.transform.localPosition.x - newPos) < 0.5f)
         {
             newPos = gameObject.transform.localPosition.x - 0.5f;
-            slider.value = (5 - newPos) / 10f;
+            sliderScreen.value = (5 - newPos) / 10f;
         }
 
         objectScreen.transform.localPosition = new Vector3(newPos, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z);
         screenPos = -gameObject.transform.localPosition.x + newPos;
+        textScreen.text = ((5 - newPos) * 10f).ToString();
+
     }
 
     public void switchView()

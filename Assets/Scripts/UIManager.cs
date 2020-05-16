@@ -6,9 +6,11 @@ public class UIManager : MonoBehaviour
 {
     public GameObject currentLowerDeck, currentUpperDeck;
     public GameObject previousLowerDeck, previousUpperDeck;
-    public int optionSelected;
+    public int optionSelected, previousOptionSelected;
     // 1 = Mount
     //2 = Move
+    //3 = Adjust
+    //4 = Menu
 
     //To check whether Image is spawned or not.
     public bool isObjectNeedlePlaced = false;
@@ -20,6 +22,7 @@ public class UIManager : MonoBehaviour
         previousLowerDeck = null;
         previousUpperDeck = null;
         optionSelected = -1;
+        previousOptionSelected = -1;
 
     }
     public void GoBack()
@@ -42,7 +45,10 @@ public class UIManager : MonoBehaviour
             previousUpperDeck.SetActive(true);
             currentUpperDeck = previousUpperDeck;
         }
-        optionSelected = -1;
+        optionSelected = previousOptionSelected;
+        previousLowerDeck = null;
+        previousUpperDeck = null;
+        previousOptionSelected = -1;
 
     }
     public void UpdateDecks(GameObject lowerDeck, GameObject upperDeck, int optionSelected1)
@@ -56,6 +62,7 @@ public class UIManager : MonoBehaviour
             currentUpperDeck.SetActive(false);
 
         }
+        previousOptionSelected = optionSelected;
         optionSelected = optionSelected1;
         previousLowerDeck = currentLowerDeck;
         previousUpperDeck = currentUpperDeck;
@@ -65,7 +72,29 @@ public class UIManager : MonoBehaviour
         currentUpperDeck.SetActive(true);
 
     }
+    public void UpdateMenu(GameObject lowerDeck, GameObject upperDeck, int optionSelected1)
+    {
+        if (currentLowerDeck != null)
+        {
+            currentLowerDeck.SetActive(false);
+
+        }
+        if (currentUpperDeck != null)
+        {
+            currentUpperDeck.SetActive(false);
+
+        }
+        previousOptionSelected = optionSelected;
+        optionSelected = optionSelected1;
+        previousLowerDeck = null;
+        previousUpperDeck = null;
+        currentUpperDeck = upperDeck;
+        currentLowerDeck = lowerDeck;
+        currentLowerDeck.SetActive(true);
+        currentUpperDeck.SetActive(true);
+    }
     public void UpdateDecks(GameObject upperDeck, int optionSelected1){
+        previousOptionSelected = optionSelected;
         optionSelected = optionSelected1;
         currentLowerDeck.SetActive(false);
         currentUpperDeck.SetActive(false);

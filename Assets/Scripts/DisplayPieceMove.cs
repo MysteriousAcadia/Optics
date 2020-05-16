@@ -43,7 +43,7 @@ public class DisplayPieceMove : MonoBehaviour
     {
         if (uIManager.optionSelected < 1)
         {
-            uIManager.UpdateDecks(lowerDeck, upperDeck, -1);
+            uIManager.UpdateMenu(lowerDeck, upperDeck, 4);
         }
         else if (uIManager.optionSelected == 1)
         {
