@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class ConvexMirrorWater : MonoBehaviour
 {
-    GameObject objectNeedle;
-    GameObject objectScreen;
+    public GameObject objectNeedle;
     
 
     private float focalLength = 3f;
@@ -35,11 +34,11 @@ public class ConvexMirrorWater : MonoBehaviour
     GameObject gameO;
     GameObject gameOVir;
     bool isWaterPresent = false;
+    public bool isToggleOn = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        objectNeedle = FindObjectOfType<ObjectNeedle>().gameObject;
 
         textNeedle.text = "4";
 
@@ -47,7 +46,7 @@ public class ConvexMirrorWater : MonoBehaviour
         gameO.transform.localScale = new Vector3(1,1,1);
         focalLength = lensFocalLength/2;
         gameOVir = Instantiate(virImage, new Vector3(-2000f, objectNeedle.transform.localPosition.y, objectNeedle.transform.localPosition.z), Quaternion.identity, opticalBench.transform);
-
+        isToggleOn = false;
         
         gameO.transform.localPosition = new Vector3(objectNeedle.transform.localPosition.x, 2 * focalLength, objectNeedle.transform.localPosition.z);
         gameO.transform.localEulerAngles = (new Vector3(-90,0,0));
@@ -62,6 +61,10 @@ public class ConvexMirrorWater : MonoBehaviour
     bool isActive = true;
     public void SetActive(bool isActive1){
         this.isActive = isActive1;
+    }
+    public void ToggleView(){
+        isPositionChanged = true;
+        isToggleOn = !isToggleOn;
     }
     
 
@@ -82,7 +85,7 @@ public class ConvexMirrorWater : MonoBehaviour
 
         uValue = objectPos;
 
-        textNeedle.text = uValue.ToString();
+        textNeedle.text = (uValue*10).ToString();
         if(focalLength==uValue){
             Debug.LogError("INFINITY");
             gameO.SetActive(false);
@@ -242,6 +245,12 @@ public class ConvexMirrorWater : MonoBehaviour
 
         
         isPositionChanged = false;
+        if (!isToggleOn)
+        {
+            gameO.SetActive(false);
+            gameOVir.SetActive(false);
+            return;
+        }
     }
 
     public void SwitchLiquid(float rf){
@@ -271,14 +280,14 @@ public class ConvexMirrorWater : MonoBehaviour
 
         newPos = slider.value;
 
-        newPos = newPos * 8;
+        newPos = newPos * 10;
 
         if(newPos < 0.02)
         {
             newPos = 0.2f;
         }
 
-        if (newPos > 8)
+        if (newPos > 10.1)
         {
             newPos = 5f;
         }

@@ -83,48 +83,57 @@ public class DisplayPieceMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isObjectDraggable){
-        if ((Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began))
+        if (isObjectDraggable)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            RaycastHit hit;
-            Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow, 100f);
-            if (Physics.Raycast(ray, out hit))
+            if ((Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began))
             {
-                Debug.Log(hit.transform.name);
-                if (hit.collider != null)
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hit;
+                Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow, 100f);
+                if (Physics.Raycast(ray, out hit))
                 {
-                    GameObject touchedObject = hit.transform.gameObject;
-
-                    Debug.Log("Touched " + touchedObject.transform.name);
-                }
-            }
-        }
-        if (Input.GetMouseButton(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            // Casts the ray and get the first game object hit
-            if (Physics.Raycast(ray, out hit))
-            {
-                Debug.Log("This hit at " + hit.point);
-                if (hit.collider != null)
-                {
-                    GameObject touchedObject = hit.transform.gameObject;
-                    if (touchedObject.transform.name == "Plane")
+                    Debug.Log(hit.transform.name);
+                    if (hit.collider != null)
                     {
-                        calcRelativePos();
-                        // moveDropper();
-                        transform.position = hit.point;
-                        isObjectDraggable = false;
-                        uIManager.GoBack();
+                        GameObject touchedObject = hit.transform.gameObject;
+
+                        Debug.Log("Touched " + touchedObject.transform.name);
                     }
-                    Debug.Log("Touched " + touchedObject.transform.name);
+                }
+            }
+            if (Input.GetMouseButton(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                // Casts the ray and get the first game object hit
+                if (Physics.Raycast(ray, out hit))
+                {
+                    Debug.Log("This hit at " + hit.point);
+                    if (hit.collider != null)
+                    {
+                        GameObject touchedObject = hit.transform.gameObject;
+                        if (touchedObject.transform.name == "Plane" || touchedObject.transform.name == "Board")
+                        {
+                            calcRelativePos();
+                            // moveDropper();
+                            transform.position = hit.point;
+                            isObjectDraggable = false;
+                            uIManager.GoBack();
+                        }
+                        Debug.Log("Touched " + touchedObject.transform.name);
+                    }
+
                 }
 
             }
-
-        }
         }
     }
+    public void Fix()
+    {
+        gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y, -0.3f);
+    }
+    public void UnFix()
+    {
+        gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y, +0.3f);
+            }
 }

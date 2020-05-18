@@ -235,7 +235,7 @@ public class ConvexLensNew : MonoBehaviour
                 float imagePos = distBetweenLens - (1 / ((1 / convexMirror.focalLenght) - (1 / objectPoss)));
                 Debug.LogError(imagePos + "imgpos");
                 float finalImagePos = 1 / ((1 / (imagePos)) + (1 / focalLength));
-                gameO.transform.localPosition = new Vector3(finalImagePos+gameObject.transform.localPosition.x, gameO.transform.localPosition.y, gameO.transform.localPosition.z);
+                gameO.transform.localPosition = new Vector3(finalImagePos + gameObject.transform.localPosition.x, gameO.transform.localPosition.y, gameO.transform.localPosition.z);
 
             }
         }

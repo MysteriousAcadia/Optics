@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7245802407308495171}
   - component: {fileID: 4013494024466920890}
   - component: {fileID: 6678821307484089459}
+  - component: {fileID: 8638049437206341231}
   m_Layer: 0
   m_Name: pin
   m_TagString: Untagged
@@ -59,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7741625113677808684, guid: bc3ec37bdc2274ad88e7bab9954aa862, type: 3}
+  - {fileID: 2100000, guid: 3b8d1b8c4dd25784a9478d276af3d533, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,3 +94,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 0}
+--- !u!114 &8638049437206341231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3426708809334309222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e6061d90ea384c6eb83747c8bb485f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIManager: {fileID: 0}
+  upperDeck: {fileID: 0}
+  lowerDeck: {fileID: 0}
+  upperMoveDeck: {fileID: 0}
+  origin: {fileID: 0}

@@ -9,14 +9,37 @@ public class PencilLine : MonoBehaviour
     public List<Vector3> vertices = new List<Vector3>(2);
     public LineRenderer lineRenderer;
     public LineEquation lineEquation;
+    MeshCollider meshCollider;
 
-    
- 
+
+    public void AddColliderToLine()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+        meshCollider = gameObject.AddComponent<MeshCollider>();
+        Mesh mesh = new Mesh();
+        lineRenderer.BakeMesh(mesh, true);
+        meshCollider.sharedMesh = mesh;
+    }
+
+/// <summary>
+/// OnMouseDown is called when the user has pressed the mouse button while
+/// over the GUIElement or Collider.
+/// </summary>
+void OnMouseDown()
+{
+    Debug.LogError("Line clicked");
+
+}
+
+
+
     void Start()
     {
         vertices.Add(new Vector3(0,0,0));
         vertices.Add(new Vector3(0,0,0)); 
-        lineRenderer = GetComponent<LineRenderer>();       
+        lineRenderer = GetComponent<LineRenderer>();  
+        meshCollider = gameObject.AddComponent<MeshCollider>();
+             
     }
 
  
