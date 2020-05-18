@@ -16,6 +16,8 @@ public class TravellingMicroscope : MonoBehaviour
     public GameObject microscopeView;
     public Image crossImage,sprinklesImage,blurImage;
     public bool isMicroscopeViewVisible = false;
+    public UIManager uIManager;
+    public GameObject lowerDeck,upperDeck;
 
     public void MoveSliderVertically(){
         float slide = vertical.value;
@@ -153,13 +155,104 @@ public class TravellingMicroscope : MonoBehaviour
 
     }
 
+    public void Adjust()
+    {
+        uIManager.UpdateDecks(lowerDeck, upperDeck, 2);
+        uIManager.previousLowerDeck = null;
+        uIManager.previousUpperDeck = null;
+    }
+
     
 
+bool isSearchingforObjects= false;
+public void Mount(){
+    isSearchingforObjects = true;
+    uIManager.UpdateDecks(upperDeck,4);
+}
   
 
     // Update is called once per frame
     void Update()
     {
+        if(isSearchingforObjects){
+        if ((Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began))
+        {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                // Casts the ray and get the first game object hit
+                if (Physics.Raycast(ray, out hit))
+                {
+                    Debug.Log("This hit at " + hit.point);
+                    if (hit.collider != null)
+                    {
+                        GameObject touchedObject = hit.transform.gameObject;
+                        if (touchedObject.transform.name == "BottleShow")
+                        {
+                            touchedObject.SetActive(false);
+                            PlaceSprinkle();
+                            uIManager.GoBack();
+                            isSearchingforObjects = false;
+                        }
+                        else if (touchedObject.transform.name == "GlassSlabShow")
+                        {
+                            touchedObject.SetActive(false);
+                            PlaceGlassSlab();
+                            uIManager.GoBack();
+                            isSearchingforObjects = false;
+                        }
+                        else if (touchedObject.transform.name == "PaperShow")
+                        {
+                            touchedObject.SetActive(false);
+                            PlaceImage();
+                            uIManager.GoBack();
+                            isSearchingforObjects = false;
+                        }
+
+                        Debug.Log("Touched " + touchedObject.transform.name);
+                    }
+
+                }
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            // Casts the ray and get the first game object hit
+            if (Physics.Raycast(ray, out hit))
+            {
+                Debug.Log("This hit at " + hit.point);
+                if (hit.collider != null)
+                {
+                    GameObject touchedObject = hit.transform.gameObject;
+                    if (touchedObject.transform.name == "BottleShow")
+                    {
+                        touchedObject.SetActive(false);
+                        PlaceSprinkle();
+                        uIManager.GoBack();
+                        isSearchingforObjects = false;
+                    }
+                    else if (touchedObject.transform.name == "GlassSlabShow")
+                    {
+                        touchedObject.SetActive(false);
+                        PlaceGlassSlab();
+                        uIManager.GoBack();
+                        isSearchingforObjects = false;
+                    }
+                    else if (touchedObject.transform.name == "PaperShow")
+                    {
+                        touchedObject.SetActive(false);
+                        PlaceImage();
+                        uIManager.GoBack();
+                        isSearchingforObjects = false;
+                    }
+                    
+                    Debug.Log("Touched " + touchedObject.transform.name);
+                }
+
+            }
+
+        }
+        }
 
     }
 }
